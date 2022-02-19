@@ -1,0 +1,125 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v7.1.2.0-->
+<message:Structure>
+  <message:Header>
+    <message:ID>IDREF227</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2022-02-15T21:49:15.485124+01:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:Dataflows>
+      <structure:Dataflow id="NASEC_IDCFINA_A" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:NASEC_IDCFINA_A(1.9)" agencyID="ESTAT" version="1.9" isFinal="true">
+        <common:Name xml:lang="en">Annual financial accounts</common:Name>
+        <structure:Structure>
+          <Ref id="NA_SEC" version="1.9" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="NASEC_IDCFINA_Q" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:NASEC_IDCFINA_Q(1.9)" agencyID="ESTAT" version="1.9" isFinal="true">
+        <common:Name xml:lang="en">Quarterly financial accounts</common:Name>
+        <structure:Structure>
+          <Ref id="NA_SEC" version="1.9" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="NASEC_IDCNFSA_A" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:NASEC_IDCNFSA_A(1.9)" agencyID="ESTAT" version="1.9" isFinal="true">
+        <common:Name xml:lang="en">Annual non-financial accounts</common:Name>
+        <structure:Structure>
+          <Ref id="NA_SEC" version="1.9" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="NASEC_IDCNFSA_Q" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:NASEC_IDCNFSA_Q(1.9)" agencyID="ESTAT" version="1.9" isFinal="true">
+        <common:Name xml:lang="en">Quarterly non-financial accounts</common:Name>
+        <structure:Structure>
+          <Ref id="NA_SEC" version="1.9" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="NA_MAIN" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=ESTAT:NA_MAIN(1.9)" agencyID="ESTAT" version="1.9" isFinal="true">
+        <common:Name xml:lang="en">NA Main Aggregates</common:Name>
+        <structure:Structure>
+          <Ref id="NA_MAIN" version="1.9" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNDATA_MDG" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=IAEG:DF_UNDATA_MDG(1.2)" agencyID="IAEG" version="1.2" isFinal="true">
+        <common:Name xml:lang="en">SDMX-MDGs</common:Name>
+        <structure:Structure>
+          <Ref id="MDG" version="1.2" agencyID="IAEG" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_SDG_GLH" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=IAEG-SDGs:DF_SDG_GLH(1.7)" agencyID="IAEG-SDGs" version="1.7" isFinal="true">
+        <common:Name xml:lang="en">SDG Harmonized Global Dataflow</common:Name>
+        <common:Description xml:lang="en">Reporting and dissemination dataflow for harmonized global SDG indicators.</common:Description>
+        <structure:Structure>
+          <Ref id="SDG" version="1.7" agencyID="IAEG-SDGs" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNData_UIS" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UIS:DF_UNData_UIS(1.1)" agencyID="UIS" version="1.1" isFinal="true">
+        <common:Name xml:lang="en">SDMX_UIS_UNData</common:Name>
+        <structure:Structure>
+          <Ref id="UIS_UNData" version="1.1" agencyID="UIS" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNDATA_COUNTRYDATA" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UNSD:DF_UNDATA_COUNTRYDATA(1.4)" agencyID="UNSD" version="1.4" isFinal="true">
+        <common:Name xml:lang="en">SDMX-CountryData</common:Name>
+        <structure:Structure>
+          <Ref id="CountryData" version="1.4" agencyID="UNSD" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNDATA_ENERGY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UNSD:DF_UNDATA_ENERGY(1.0)" agencyID="UNSD" version="1.0" isFinal="true">
+        <common:Annotations>
+          <common:Annotation>
+            <common:AnnotationTitle>COMMODITY,TRANSACTION</common:AnnotationTitle>
+            <common:AnnotationType>LAYOUT_ROW</common:AnnotationType>
+          </common:Annotation>
+          <common:Annotation>
+            <common:AnnotationTitle>TIME_PERIOD</common:AnnotationTitle>
+            <common:AnnotationType>LAYOUT_COLUMN</common:AnnotationType>
+          </common:Annotation>
+          <common:Annotation>
+            <common:AnnotationTitle>REF_AREA</common:AnnotationTitle>
+            <common:AnnotationType>LAYOUT_ROW_SECTION</common:AnnotationType>
+          </common:Annotation>
+          <common:Annotation>
+            <common:AnnotationTitle>FREQ,OBS_STATUS=A,UNIT_MULT=0</common:AnnotationTitle>
+            <common:AnnotationType>NOT_DISPLAYED</common:AnnotationType>
+          </common:Annotation>
+        </common:Annotations>
+        <common:Name xml:lang="en">Energy statistics dataflow</common:Name>
+        <structure:Structure>
+          <Ref id="DSD_ENERGY" version="1.0" agencyID="UNSD" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNDATA_SEEA_SUPPLY" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UNSD:DF_UNDATA_SEEA_SUPPLY(1.2)" agencyID="UNSD" version="1.2" isFinal="true">
+        <common:Name xml:lang="en">SEEA SUPPLY DATA</common:Name>
+        <structure:Structure>
+          <Ref id="SEEANRG" version="1.2" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNDATA_SEEA_USE" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UNSD:DF_UNDATA_SEEA_USE(1.2)" agencyID="UNSD" version="1.2" isFinal="true">
+        <common:Name xml:lang="en">SEEA USE DATA</common:Name>
+        <structure:Structure>
+          <Ref id="SEEANRG" version="1.2" agencyID="ESTAT" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNData_EnergyBalance" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UNSD:DF_UNData_EnergyBalance(1.0)" agencyID="UNSD" version="1.0" isFinal="false">
+        <common:Name xml:lang="en">Energy Balance DataFlow</common:Name>
+        <structure:Structure>
+          <Ref id="DSD_ENERGY_BALANCE_UNDATA" version="1.0" agencyID="UNSD" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNData_UNFCC" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=UNSD:DF_UNData_UNFCC(1.0)" agencyID="UNSD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">SDMX_GHG_UNDATA</common:Name>
+        <structure:Structure>
+          <Ref id="DSD_GHG_UNDATA" version="1.0" agencyID="UNSD" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+      <structure:Dataflow id="DF_UNDATA_WDI" urn="urn:sdmx:org.sdmx.infomodel.datastructure.Dataflow=WB:DF_UNDATA_WDI(1.0)" agencyID="WB" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">WB World Development Indicators</common:Name>
+        <structure:Structure>
+          <Ref id="WDI" version="1.0" agencyID="WB" package="datastructure" class="DataStructure" />
+        </structure:Structure>
+      </structure:Dataflow>
+    </structure:Dataflows>
+  </message:Structures>
+</message:Structure>
