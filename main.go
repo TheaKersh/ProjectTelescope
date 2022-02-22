@@ -1,17 +1,21 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
+	"encoding/xml"
 	"fmt"
+	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-  "io/ioutil"
-  "html/template"
-	"encoding/xml"
-	//"bufio"
 	//"strings"
 )
+
+type Representable interface {
+  toString() string
+}
 
 //Types for dealing with common elements in undata xml
 type Header struct {
@@ -25,6 +29,7 @@ type Structure struct {
   Header Header `xml:"Header"`
   Structures Structures `xml:"Structures"`
 }
+
 
 type Structures struct {
   XMLName xml.Name `xml:"Structures"`
@@ -56,21 +61,21 @@ type refID struct {
 type CodeStructure struct {
 	XMLName xml.Name `xml:"Structure"`
   Header Header `xml:"Header"`
-  Structures CodeStructures `xml:"Structures"`
+  CodeStructures CodeStructures
 }
 
 type CodeStructures struct {
   XMLName xml.Name `xml:"Structures"`
-  CodeLists CodeLists `xml:"Codelists"`  
+  CodeLists CodeLists `xml:"Codelists"`
 }
 
 type CodeLists struct {
   XMlName xml.Name `xml:"Codelists"`
-  CodeLists []CodeList //`xml:"CodeLists>CodeList"`
+  CodeLists []CodeList`xml:"Codelist"`
 } 
 
 type CodeList struct {
-  XMlName xml.Name `xml:"CodeList"`
+  XMlName xml.Name `xml:"Codelist"`
   Description string `xml:"Description"`
   Codes []Code `xml:"Code"`
 }
@@ -79,6 +84,20 @@ type Code struct {
   XmlName xml.Name `xml:"Code"`
   Id string `xml:"id,attr"`
   CommonName string `xml:"Name"`
+}
+func (c CodeStructure) toString() [][]string {
+  var codelists CodeLists = c.CodeStructures.CodeLists
+  var retVal [][]string = make([][]string, 30)
+  for i := range retVal {
+    retVal[i] = make([]string, 1000)
+  }
+  for index, codelist := range codelists.CodeLists {
+    retVal[index][0] += codelist.Description + "\n"
+    for j, code := range codelist.Codes {
+      retVal[index][j] += code.CommonName + "  " + code.Id + "\n"
+    }
+  }
+  return retVal
 }
 
 func check(err error) {
@@ -96,9 +115,6 @@ func initNameQueryMap() map[string]string {
 
 func getRequest(w http.ResponseWriter, r *http.Request) {
   client := &http.Client{}
-  //starttime := "1995"
-  //endtime := "2001"
-  //m := initNameQueryMap()
   req, err := http.NewRequest("GET", "https://data.un.org/ws/rest/data/DF_UNData_UNFCC/A.EN_ATM_PFCE.AUS.Gg_CO2", nil)
   check(err)
   req.Header.Set("Accept", "text/json")
@@ -137,28 +153,13 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
   buf := new(bytes.Buffer)
   buf.ReadFrom(resp.Body)
 
-  /*xmlTest := buf.Bytes()
-  f, err := os.OpenFile("test.html", os.O_APPEND|os.O_WRONLY, os.ModeAppend)
-  defer f.Close()
-  check(err)
-  writer := bufio.NewWriter(f)
-  n, err := writer.Write(xmlTest)
-  check(err)
-  fmt.Printf("wrote %d bytes\n", n)
-  writer.Flush()*/
-  
   f2, err := os.Open("test.html")
-  check(err)
-  
-
 
   byteVal, err := ioutil.ReadAll(f2)
   xml.Unmarshal(byteVal, &structures) 
-  fmt.Printf("%#v",structures)
   element := CreateDataflow()
   for _, index := range structures.Structures.Flows.Dataflow {
-    fmt.Printf("\n%#v\n", index)
-    fmt.Print(index.Id == SearchTerm)
+    fmt.Println(index.Id == SearchTerm)
     if (index.Id == SearchTerm){
       element = index
     }
@@ -170,10 +171,26 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
   check(err)
   reader := new(bytes.Buffer)
   reader.ReadFrom(resp.Body)
+  f, err := os.Create("datatemplate.html")
+  check(err)
   var codestructures *CodeStructure = new(CodeStructure)
+  fwriter := bufio.NewWriter(f) 
   xml.Unmarshal(reader.Bytes(), codestructures)
-  fmt.Printf("\n\n\n%#v\n\n\n",codestructures)
+  fwriter.Write([]byte("<!DOCTYPE html>\n<html lang = \"en\">"))
+
+  for _, codelist := range codestructures.CodeStructures.CodeLists.CodeLists{
+    for _, code := range codelist.Codes {
+      fwriter.Write([]byte(" <input type=\"radio\" id=\"" + code.Id + ":" +code.CommonName + "\"name=\"" + code.Id + "\"value=\"HTML\">"))
+    }
+  }
+  tmpl = template.Must(template.ParseFiles("datatemplate.html"))
+  tmpl.Execute(w, nil)
   
+  
+  
+  
+
+ 
   
 }
 
