@@ -3,29 +3,29 @@ package main
 import "encoding/xml"
 
 type CodeStructure struct {
-	XMLName xml.Name `xml:"Structure"`
-  Header Header `xml:"Header"`
-  CodeStructures CodeStructures
+	XMLName        xml.Name `xml:"Structure"`
+	Header         Header   `xml:"Header"`
+	CodeStructures CodeStructures
 }
 
 type CodeStructures struct {
-  XMLName xml.Name `xml:"Structures"`
-  CodeLists CodeLists `xml:"Codelists"`
+	XMLName   xml.Name  `xml:"Structures"`
+	CodeLists CodeLists `xml:"Codelists"`
 }
 
 type CodeLists struct {
-  XMlName xml.Name `xml:"Codelists"`
-  CodeLists []CodeList`xml:"Codelist"`
-} 
+	XMlName   xml.Name   `xml:"Codelists"`
+	CodeLists []CodeList `xml:"Codelist"`
+}
 
 type CodeList struct {
-  XMlName xml.Name `xml:"Codelist"`
-  Description string `xml:"Description"`
-  Codes []Code `xml:"Code"`
+	XMlName     xml.Name `xml:"Codelist"`
+	Description string   `xml:"Description"`
+	Codes       []Code   `xml:"Code"`
 }
 
 type Code struct {
-  XmlName xml.Name `xml:"Code"`
-  Id string `xml:"id,attr"`
-  CommonName string `xml:"Name"`
+	XmlName    xml.Name `xml:"Code"`
+	Id         string   `xml:"id,attr"`
+	CommonName string   `xml:"Name"`
 }

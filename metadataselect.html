@@ -1,9 +1,17 @@
 <!DOCTYPE html>
-  <h1>Select Metadata parameterization</h1>
-    <form method="POST">
-      <label>Parameterize:</label>
-      <input type="radio"/ name="Returnparams"><br />
-      <input type="submit">
-    </form>
-</html>
+<h1>Myanmar</h1>
+<ul>
+    {{range .CodeStructures.CodeLists.CodeLists}}
+      <div><li>{{.}}</li></div>
+      <!--{{range .Codes}}  
+        {{if .Done}}
+          <div><li class="done">{{.}}</li></div>
+        {{else}}
+          <div><li>{{.}}</li></div>
+        {{end}}
+      {{end}}
+      !-->
+    {{end}}
+</ul>
+
 

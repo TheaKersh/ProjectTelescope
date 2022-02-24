@@ -1,11 +1,13 @@
 package main
 
 import (
-	"bufio"
+	//"bufio"
 	"bytes"
 	"encoding/xml"
 	"fmt"
 	"html/template"
+
+	//"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -108,22 +110,22 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	check(err)
 	reader := new(bytes.Buffer)
 	reader.ReadFrom(resp.Body)
-	f, err := os.Create("datatemplate.html")
+	f, err := os.Create("templateTest.html")
 	check(err)
 	var codestructures *CodeStructure = new(CodeStructure)
-	fwriter := bufio.NewWriter(f)
 	xml.Unmarshal(reader.Bytes(), codestructures)
-	fwriter.Write([]byte("<!DOCTYPE html>\n<html lang = \"en\">"))
 
+	tmpl = template.Must(template.ParseFiles("metadataselect.html"))
+	tmpl.Execute(f, codestructures)
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
-	f, err := os.Open("datatemplate.html")
+	f, err := os.Open("metadataselect.html")
 	check(err)
 	bytes, err := ioutil.ReadAll(f)
 	check(err)
 	w.Write(bytes)
-	os.Remove("datatemplate.html")
+
 }
 
 func main() {
