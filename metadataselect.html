@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<h1>Myanmar</h1>
+<h1>Options</h1>
 <ul>
     {{range .CodeStructures.CodeLists.CodeLists}}
-      <div><li>{{.}}</li></div>
-      <!--{{range .Codes}}  
-        {{if .Done}}
-          <div><li class="done">{{.}}</li></div>
-        {{else}}
-          <div><li>{{.}}</li></div>
-        {{end}}
+      <div><li>{{.Description}}</li></div>
+      {{range .Codes}}  
+        <div><li>{{.}}</li></div>
       {{end}}
-      !-->
     {{end}}
 </ul>
 
