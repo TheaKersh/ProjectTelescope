@@ -2,11 +2,15 @@
 <h1>Options</h1>
 <ul>
     {{range .CodeStructures.CodeLists.CodeLists}}
-      <Codelist><li>{{.Description}}</li></Codelist>
+      <div><label for="{{.Description}}">{{.Name}}</label></div>
+      <select name="{{.Name}}" id = "{{.Description}}"><li>Select the filtered attributes of {{.Name}}</li>
       {{range .Codes}}  
-        <Code><li>{{.}}</li></Code>
+        <option value = "{{.Id}}"><li>{{.CommonName}}</li></option>
       {{end}}
+      </select>
     {{end}}
 </ul>
-
+<form method = "POST">  
+  <button name = "Submit">Submit Form</button> 
+</form> 
 

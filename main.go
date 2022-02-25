@@ -114,9 +114,9 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	check(err)
 	var codestructures *CodeStructure = new(CodeStructure)
 	xml.Unmarshal(reader.Bytes(), codestructures)
-
 	tmpl = template.Must(template.ParseFiles("innerTemplate.html"))
 	tmpl.Execute(f, codestructures)
+
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {

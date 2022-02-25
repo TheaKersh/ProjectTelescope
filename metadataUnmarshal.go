@@ -21,6 +21,7 @@ type CodeLists struct {
 type CodeList struct {
 	XMlName     xml.Name `xml:"Codelist"`
 	Description string   `xml:"Description"`
+	Name        string   `xml:"Name"`
 	Codes       []Code   `xml:"Code"`
 }
 
