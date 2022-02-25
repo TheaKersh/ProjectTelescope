@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<h1>Options</h1>
+<ul>
+    {{range .CodeStructures.CodeLists.CodeLists}}
+      <Codelist><li>{{.Description}}</li></Codelist>
+      {{range .Codes}}  
+        <Code><li>{{.}}</li></Code>
+      {{end}}
+    {{end}}
+</ul>
+
+

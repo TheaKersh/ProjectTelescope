@@ -115,12 +115,12 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	var codestructures *CodeStructure = new(CodeStructure)
 	xml.Unmarshal(reader.Bytes(), codestructures)
 
-	tmpl = template.Must(template.ParseFiles("metadataselect.html"))
+	tmpl = template.Must(template.ParseFiles("innerTemplate.html"))
 	tmpl.Execute(f, codestructures)
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
-	f, err := os.Open("metadataselect.html")
+	f, err := os.Open("templateTest.html")
 	check(err)
 	bytes, err := ioutil.ReadAll(f)
 	check(err)
