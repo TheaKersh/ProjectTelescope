@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <h1>Options</h1>
-<ul>
+<header>
+  <script src="/javascript/target.js" defer>
+  </script>
+</header>
+<form id = "Paramform"method = "POST">  
+  <ul id = "Paramselect">
     {{range .CodeStructures.CodeLists.CodeLists}}
-      <div><label for="{{.Description}}">{{.Name}}</label></div>
-      <select name="{{.Name}}" id = "{{.Description}}"><li>Select the filtered attributes of {{.Name}}</li>
+      <div><label for="{{.Name}}">{{.Name}}</label></div>
+      <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
       {{range .Codes}}  
         <option value = "{{.Id}}"><li>{{.CommonName}}</li></option>
       {{end}}
       </select>
     {{end}}
-</ul>
-<form method = "POST">  
-  <button name = "Submit">Submit Form</button> 
+  </ul>
+  <button id="Submit">Submit Form</button> 
 </form> 
 

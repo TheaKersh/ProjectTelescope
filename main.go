@@ -15,6 +15,8 @@ import (
 	//"strings"
 )
 
+var listnames []string = make([]string, 100, 100)
+
 //Types for dealing with common elements in undata xml
 type Header struct {
 	XMLName xml.Name `xml:"Header"`
@@ -116,22 +118,51 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	xml.Unmarshal(reader.Bytes(), codestructures)
 	tmpl = template.Must(template.ParseFiles("innerTemplate.html"))
 	tmpl.Execute(f, codestructures)
-
+	listnames = make([]string, 0)
+	for _, element := range codestructures.CodeStructures.CodeLists.CodeLists {
+		listnames = append(listnames, element.Name)
+		fmt.Print(element.Name + "\n")
+	}
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
 	f, err := os.Open("templateTest.html")
 	check(err)
-	bytes, err := ioutil.ReadAll(f)
+	slice, err := ioutil.ReadAll(f)
 	check(err)
-	w.Write(bytes)
+	w.Write(slice)
+	req := *r
+	check(err)
+	fmt.Printf("%#v", req.Body)
 
 }
 
+func searchPath(path string, r *http.Request) string {
+	title := r.URL.Path[len("/"+path+"/"):]
+	return title
+}
+
+func retrieveFile(w http.ResponseWriter, r *http.Request) {
+	title := searchPath("javascript", r)
+	buf := new(bytes.Buffer)
+	file, err := os.Open("javascript\\" + title)
+	check(err)
+	_, err = buf.ReadFrom(file)
+	check(err)
+	fmt.Print(buf.String())
+	w.Write(buf.Bytes())
+}
+
 func main() {
+	http.HandleFunc("/javascript/", retrieveFile)
 	http.HandleFunc("/view/", getRequest)
 	http.HandleFunc("/", titleDefault)
 	http.HandleFunc("/search/", searchForData)
 	http.HandleFunc("/mdata/", testParameterization)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	s := &http.Server{
+		Addr:           ":8080",
+		MaxHeaderBytes: 1 << 20,
+		ErrorLog:       log.New(os.Stdout, "err:", log.Ldate|log.Ltime|log.Lshortfile),
+	}
+	log.Println(s.ListenAndServe())
 }

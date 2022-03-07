@@ -40,11 +40,11 @@
   Plotly.newPlot('myDiv', data)
 }
 
-window.onload = () => {
-  fetch("/view")
-    .then(response => response.json())
-    .then(displayData);
-}
+  window.onload = () => {
+    fetch("/view")
+      .then(response => response.json())
+      .then(displayData);
+    }
   </script>
 </head>  
 <body>
