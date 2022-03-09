@@ -151,6 +151,9 @@ func retrieveFile(w http.ResponseWriter, r *http.Request) {
 	check(err)
 	fmt.Print(buf.String())
 	w.Write(buf.Bytes())
+	err = r.ParseForm()
+	check(err)
+	fmt.Print(r.PostForm)
 }
 
 func main() {

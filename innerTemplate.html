@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <h1>Options</h1>
 <header>
-  <script src="/javascript/target.js" defer>
-  </script>
+  <script src = "https://code.jquery.com/jquery-3.6.0.js"></script>
+
 </header>
 <form id = "Paramform"method = "POST">  
   <ul id = "Paramselect">
     {{range .CodeStructures.CodeLists.CodeLists}}
       <div><label for="{{.Name}}">{{.Name}}</label></div>
-      <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
+     <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
       {{range .Codes}}  
         <option value = "{{.Id}}"><li>{{.CommonName}}</li></option>
       {{end}}

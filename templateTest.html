@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <h1>Options</h1>
 <header>
-  <script src="/javascript/target.js" defer>
-  </script>
+  <script src = "https://code.jquery.com/jquery-3.6.0.js"></script>
+
 </header>
 <form id = "Paramform"method = "POST">  
-  <ul>
+  <ul id = "Paramselect">
     
       <div><label for="Frequency">Frequency</label></div>
-      <select name="Frequency" id = "Frequency"><li>Select the filtered attributes of Frequency</li>
+     <select name="Frequency" id = "Frequency" EnableViewState = true><li>Select the filtered attributes of Frequency</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "A"><li>Annual</li></option>
         
@@ -31,7 +38,14 @@
       </select>
     
       <div><label for="Observation Status">Observation Status</label></div>
-      <select name="Observation Status" id = "Observation Status"><li>Select the filtered attributes of Observation Status</li>
+     <select name="Observation Status" id = "Observation Status" EnableViewState = true><li>Select the filtered attributes of Observation Status</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "A"><li>Normal value</li></option>
         
@@ -76,7 +90,14 @@
       </select>
     
       <div><label for="Unit Multiplier">Unit Multiplier</label></div>
-      <select name="Unit Multiplier" id = "Unit Multiplier"><li>Select the filtered attributes of Unit Multiplier</li>
+     <select name="Unit Multiplier" id = "Unit Multiplier" EnableViewState = true><li>Select the filtered attributes of Unit Multiplier</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "0"><li>Units</li></option>
         
@@ -143,7 +164,14 @@
       </select>
     
       <div><label for="Reference area code list">Reference area code list</label></div>
-      <select name="Reference area code list" id = "Reference area code list"><li>Select the filtered attributes of Reference area code list</li>
+     <select name="Reference area code list" id = "Reference area code list" EnableViewState = true><li>Select the filtered attributes of Reference area code list</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "004"><li>Afghanistan</li></option>
         
@@ -646,7 +674,14 @@
       </select>
     
       <div><label for="Commodity code list">Commodity code list</label></div>
-      <select name="Commodity code list" id = "Commodity code list"><li>Select the filtered attributes of Commodity code list</li>
+     <select name="Commodity code list" id = "Commodity code list" EnableViewState = true><li>Select the filtered attributes of Commodity code list</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "0100"><li>Hard Coal</li></option>
         
@@ -801,7 +836,14 @@
       </select>
     
       <div><label for="Energy transaction code list">Energy transaction code list</label></div>
-      <select name="Energy transaction code list" id = "Energy transaction code list"><li>Select the filtered attributes of Energy transaction code list</li>
+     <select name="Energy transaction code list" id = "Energy transaction code list" EnableViewState = true><li>Select the filtered attributes of Energy transaction code list</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "01"><li>Production</li></option>
         
@@ -1232,7 +1274,14 @@
       </select>
     
       <div><label for="Unit of Measure code list">Unit of Measure code list</label></div>
-      <select name="Unit of Measure code list" id = "Unit of Measure code list"><li>Select the filtered attributes of Unit of Measure code list</li>
+     <select name="Unit of Measure code list" id = "Unit of Measure code list" EnableViewState = true><li>Select the filtered attributes of Unit of Measure code list</li>
+      <script>
+        $("select").on({
+        change: function() {
+            console.log($(this).val());
+        }
+        }); 
+      </script>
         
         <option value = "M3"><li>Cubic metres</li></option>
         
