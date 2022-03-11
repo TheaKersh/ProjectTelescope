@@ -4,1294 +4,1259 @@
   <script src = "https://code.jquery.com/jquery-3.6.0.js"></script>
 
 </header>
-<form id = "Paramform"method = "POST">  
+<form id = "Paramform"method = "POST"> 
+  <script>
+    $("recordOption").on('click', function(event) {
+        event.stopPropagation()
+        event.stopImmediatePropagation()
+        console.log($(this).val());
+    }); 
+  </script> 
   <ul id = "Paramselect">
     
       <div><label for="Frequency">Frequency</label></div>
      <select name="Frequency" id = "Frequency" EnableViewState = true><li>Select the filtered attributes of Frequency</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "A"><li>Annual</li></option>
+        <option value = "A" class = "recordOption"><li>Annual</li></option>
         
-        <option value = "S"><li>Half-yearly, semester</li></option>
+        <option value = "S" class = "recordOption"><li>Half-yearly, semester</li></option>
         
-        <option value = "Q"><li>Quarterly</li></option>
+        <option value = "Q" class = "recordOption"><li>Quarterly</li></option>
         
-        <option value = "M"><li>Monthly</li></option>
+        <option value = "M" class = "recordOption"><li>Monthly</li></option>
         
-        <option value = "W"><li>Weekly</li></option>
+        <option value = "W" class = "recordOption"><li>Weekly</li></option>
         
-        <option value = "D"><li>Daily</li></option>
+        <option value = "D" class = "recordOption"><li>Daily</li></option>
         
-        <option value = "H"><li>Hourly</li></option>
+        <option value = "H" class = "recordOption"><li>Hourly</li></option>
         
-        <option value = "B"><li>Daily – businessweek</li></option>
+        <option value = "B" class = "recordOption"><li>Daily – businessweek</li></option>
         
-        <option value = "N"><li>Minutely</li></option>
+        <option value = "N" class = "recordOption"><li>Minutely</li></option>
       
       </select>
     
       <div><label for="Observation Status">Observation Status</label></div>
      <select name="Observation Status" id = "Observation Status" EnableViewState = true><li>Select the filtered attributes of Observation Status</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "A"><li>Normal value</li></option>
+        <option value = "A" class = "recordOption"><li>Normal value</li></option>
         
-        <option value = "B"><li>Time series break</li></option>
+        <option value = "B" class = "recordOption"><li>Time series break</li></option>
         
-        <option value = "D"><li>Definition differs</li></option>
+        <option value = "D" class = "recordOption"><li>Definition differs</li></option>
         
-        <option value = "E"><li>Estimated value</li></option>
+        <option value = "E" class = "recordOption"><li>Estimated value</li></option>
         
-        <option value = "F"><li>Forecast value</li></option>
+        <option value = "F" class = "recordOption"><li>Forecast value</li></option>
         
-        <option value = "G"><li>Experimental value</li></option>
+        <option value = "G" class = "recordOption"><li>Experimental value</li></option>
         
-        <option value = "H"><li>Missing value; holiday or weekend</li></option>
+        <option value = "H" class = "recordOption"><li>Missing value; holiday or weekend</li></option>
         
-        <option value = "I"><li>Imputed value (CCSA definition)</li></option>
+        <option value = "I" class = "recordOption"><li>Imputed value (CCSA definition)</li></option>
         
-        <option value = "J"><li>Derogation</li></option>
+        <option value = "J" class = "recordOption"><li>Derogation</li></option>
         
-        <option value = "K"><li>Data included in another category</li></option>
+        <option value = "K" class = "recordOption"><li>Data included in another category</li></option>
         
-        <option value = "L"><li>Missing value; data exist but were not collected</li></option>
+        <option value = "L" class = "recordOption"><li>Missing value; data exist but were not collected</li></option>
         
-        <option value = "M"><li>Missing value; data cannot exist</li></option>
+        <option value = "M" class = "recordOption"><li>Missing value; data cannot exist</li></option>
         
-        <option value = "N"><li>Not significant</li></option>
+        <option value = "N" class = "recordOption"><li>Not significant</li></option>
         
-        <option value = "O"><li>Missing value</li></option>
+        <option value = "O" class = "recordOption"><li>Missing value</li></option>
         
-        <option value = "P"><li>Provisional value</li></option>
+        <option value = "P" class = "recordOption"><li>Provisional value</li></option>
         
-        <option value = "Q"><li>Missing value; suppressed</li></option>
+        <option value = "Q" class = "recordOption"><li>Missing value; suppressed</li></option>
         
-        <option value = "S"><li>Strike and other special events</li></option>
+        <option value = "S" class = "recordOption"><li>Strike and other special events</li></option>
         
-        <option value = "U"><li>Low reliability</li></option>
+        <option value = "U" class = "recordOption"><li>Low reliability</li></option>
         
-        <option value = "V"><li>Unvalidated value</li></option>
+        <option value = "V" class = "recordOption"><li>Unvalidated value</li></option>
         
-        <option value = "W"><li>Includes data from another category</li></option>
+        <option value = "W" class = "recordOption"><li>Includes data from another category</li></option>
       
       </select>
     
       <div><label for="Unit Multiplier">Unit Multiplier</label></div>
      <select name="Unit Multiplier" id = "Unit Multiplier" EnableViewState = true><li>Select the filtered attributes of Unit Multiplier</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "0"><li>Units</li></option>
+        <option value = "0" class = "recordOption"><li>Units</li></option>
         
-        <option value = "1"><li>Tens</li></option>
+        <option value = "1" class = "recordOption"><li>Tens</li></option>
         
-        <option value = "2"><li>Hundreds</li></option>
+        <option value = "2" class = "recordOption"><li>Hundreds</li></option>
         
-        <option value = "3"><li>Thousands</li></option>
+        <option value = "3" class = "recordOption"><li>Thousands</li></option>
         
-        <option value = "4"><li>Tens of thousands</li></option>
+        <option value = "4" class = "recordOption"><li>Tens of thousands</li></option>
         
-        <option value = "5"><li>Hundreds of thousands</li></option>
+        <option value = "5" class = "recordOption"><li>Hundreds of thousands</li></option>
         
-        <option value = "6"><li>Millions</li></option>
+        <option value = "6" class = "recordOption"><li>Millions</li></option>
         
-        <option value = "7"><li>Tens of millions</li></option>
+        <option value = "7" class = "recordOption"><li>Tens of millions</li></option>
         
-        <option value = "8"><li>Hundreds of millions</li></option>
+        <option value = "8" class = "recordOption"><li>Hundreds of millions</li></option>
         
-        <option value = "9"><li>Billions</li></option>
+        <option value = "9" class = "recordOption"><li>Billions</li></option>
         
-        <option value = "10"><li>Tens of billions</li></option>
+        <option value = "10" class = "recordOption"><li>Tens of billions</li></option>
         
-        <option value = "11"><li>Hundreds of billions</li></option>
+        <option value = "11" class = "recordOption"><li>Hundreds of billions</li></option>
         
-        <option value = "12"><li>Trillions</li></option>
+        <option value = "12" class = "recordOption"><li>Trillions</li></option>
         
-        <option value = "13"><li>Tens of trillions</li></option>
+        <option value = "13" class = "recordOption"><li>Tens of trillions</li></option>
         
-        <option value = "14"><li>Hundreds of trillions</li></option>
+        <option value = "14" class = "recordOption"><li>Hundreds of trillions</li></option>
         
-        <option value = "15"><li>Quadrillions</li></option>
+        <option value = "15" class = "recordOption"><li>Quadrillions</li></option>
         
-        <option value = "-1"><li>Tenths</li></option>
+        <option value = "-1" class = "recordOption"><li>Tenths</li></option>
         
-        <option value = "-2"><li>Hundredths</li></option>
+        <option value = "-2" class = "recordOption"><li>Hundredths</li></option>
         
-        <option value = "-3"><li>Thousandths</li></option>
+        <option value = "-3" class = "recordOption"><li>Thousandths</li></option>
         
-        <option value = "-4"><li>Ten-thousandths</li></option>
+        <option value = "-4" class = "recordOption"><li>Ten-thousandths</li></option>
         
-        <option value = "-5"><li>Hundred-thousandths</li></option>
+        <option value = "-5" class = "recordOption"><li>Hundred-thousandths</li></option>
         
-        <option value = "-6"><li>Millionths</li></option>
+        <option value = "-6" class = "recordOption"><li>Millionths</li></option>
         
-        <option value = "-7"><li>Ten-millionths</li></option>
+        <option value = "-7" class = "recordOption"><li>Ten-millionths</li></option>
         
-        <option value = "-8"><li>Hundred-millionths</li></option>
+        <option value = "-8" class = "recordOption"><li>Hundred-millionths</li></option>
         
-        <option value = "-9"><li>Billionths</li></option>
+        <option value = "-9" class = "recordOption"><li>Billionths</li></option>
         
-        <option value = "-10"><li>Ten-billionths</li></option>
+        <option value = "-10" class = "recordOption"><li>Ten-billionths</li></option>
         
-        <option value = "-11"><li>Hundred-billionths</li></option>
+        <option value = "-11" class = "recordOption"><li>Hundred-billionths</li></option>
         
-        <option value = "-12"><li>Trillionths</li></option>
+        <option value = "-12" class = "recordOption"><li>Trillionths</li></option>
         
-        <option value = "-13"><li>Ten-trillionths</li></option>
+        <option value = "-13" class = "recordOption"><li>Ten-trillionths</li></option>
         
-        <option value = "-14"><li>Hundred-trillionths</li></option>
+        <option value = "-14" class = "recordOption"><li>Hundred-trillionths</li></option>
         
-        <option value = "-15"><li>Quadrillionths</li></option>
+        <option value = "-15" class = "recordOption"><li>Quadrillionths</li></option>
       
       </select>
     
       <div><label for="Reference area code list">Reference area code list</label></div>
      <select name="Reference area code list" id = "Reference area code list" EnableViewState = true><li>Select the filtered attributes of Reference area code list</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "004"><li>Afghanistan</li></option>
+        <option value = "004" class = "recordOption"><li>Afghanistan</li></option>
         
-        <option value = "008"><li>Albania</li></option>
+        <option value = "008" class = "recordOption"><li>Albania</li></option>
         
-        <option value = "012"><li>Algeria</li></option>
+        <option value = "012" class = "recordOption"><li>Algeria</li></option>
         
-        <option value = "016"><li>American Samoa</li></option>
+        <option value = "016" class = "recordOption"><li>American Samoa</li></option>
         
-        <option value = "020"><li>Andorra</li></option>
+        <option value = "020" class = "recordOption"><li>Andorra</li></option>
         
-        <option value = "024"><li>Angola</li></option>
+        <option value = "024" class = "recordOption"><li>Angola</li></option>
         
-        <option value = "028"><li>Antigua and Barbuda</li></option>
+        <option value = "028" class = "recordOption"><li>Antigua and Barbuda</li></option>
         
-        <option value = "031"><li>Azerbaijan</li></option>
+        <option value = "031" class = "recordOption"><li>Azerbaijan</li></option>
         
-        <option value = "032"><li>Argentina</li></option>
+        <option value = "032" class = "recordOption"><li>Argentina</li></option>
         
-        <option value = "036"><li>Australia</li></option>
+        <option value = "036" class = "recordOption"><li>Australia</li></option>
         
-        <option value = "040"><li>Austria</li></option>
+        <option value = "040" class = "recordOption"><li>Austria</li></option>
         
-        <option value = "044"><li>Bahamas</li></option>
+        <option value = "044" class = "recordOption"><li>Bahamas</li></option>
         
-        <option value = "048"><li>Bahrain</li></option>
+        <option value = "048" class = "recordOption"><li>Bahrain</li></option>
         
-        <option value = "050"><li>Bangladesh</li></option>
+        <option value = "050" class = "recordOption"><li>Bangladesh</li></option>
         
-        <option value = "051"><li>Armenia</li></option>
+        <option value = "051" class = "recordOption"><li>Armenia</li></option>
         
-        <option value = "052"><li>Barbados</li></option>
+        <option value = "052" class = "recordOption"><li>Barbados</li></option>
         
-        <option value = "056"><li>Belgium</li></option>
+        <option value = "056" class = "recordOption"><li>Belgium</li></option>
         
-        <option value = "060"><li>Bermuda</li></option>
+        <option value = "060" class = "recordOption"><li>Bermuda</li></option>
         
-        <option value = "064"><li>Bhutan</li></option>
+        <option value = "064" class = "recordOption"><li>Bhutan</li></option>
         
-        <option value = "068"><li>Bolivia</li></option>
+        <option value = "068" class = "recordOption"><li>Bolivia</li></option>
         
-        <option value = "070"><li>Bosnia and Herzegovina</li></option>
+        <option value = "070" class = "recordOption"><li>Bosnia and Herzegovina</li></option>
         
-        <option value = "072"><li>Botswana</li></option>
+        <option value = "072" class = "recordOption"><li>Botswana</li></option>
         
-        <option value = "076"><li>Brazil</li></option>
+        <option value = "076" class = "recordOption"><li>Brazil</li></option>
         
-        <option value = "081"><li>Antarctic Fisheries</li></option>
+        <option value = "081" class = "recordOption"><li>Antarctic Fisheries</li></option>
         
-        <option value = "084"><li>Belize</li></option>
+        <option value = "084" class = "recordOption"><li>Belize</li></option>
         
-        <option value = "090"><li>Solomon Islands</li></option>
+        <option value = "090" class = "recordOption"><li>Solomon Islands</li></option>
         
-        <option value = "092"><li>British Virgin Islands</li></option>
+        <option value = "092" class = "recordOption"><li>British Virgin Islands</li></option>
         
-        <option value = "096"><li>Brunei Darussalam</li></option>
+        <option value = "096" class = "recordOption"><li>Brunei Darussalam</li></option>
         
-        <option value = "100"><li>Bulgaria</li></option>
+        <option value = "100" class = "recordOption"><li>Bulgaria</li></option>
         
-        <option value = "104"><li>Myanmar</li></option>
+        <option value = "104" class = "recordOption"><li>Myanmar</li></option>
         
-        <option value = "108"><li>Burundi</li></option>
+        <option value = "108" class = "recordOption"><li>Burundi</li></option>
         
-        <option value = "112"><li>Belarus</li></option>
+        <option value = "112" class = "recordOption"><li>Belarus</li></option>
         
-        <option value = "116"><li>Cambodia</li></option>
+        <option value = "116" class = "recordOption"><li>Cambodia</li></option>
         
-        <option value = "120"><li>Cameroon</li></option>
+        <option value = "120" class = "recordOption"><li>Cameroon</li></option>
         
-        <option value = "124"><li>Canada</li></option>
+        <option value = "124" class = "recordOption"><li>Canada</li></option>
         
-        <option value = "132"><li>Cabo Verde</li></option>
+        <option value = "132" class = "recordOption"><li>Cabo Verde</li></option>
         
-        <option value = "136"><li>Cayman Islands</li></option>
+        <option value = "136" class = "recordOption"><li>Cayman Islands</li></option>
         
-        <option value = "140"><li>Central African Republic</li></option>
+        <option value = "140" class = "recordOption"><li>Central African Republic</li></option>
         
-        <option value = "144"><li>Sri Lanka</li></option>
+        <option value = "144" class = "recordOption"><li>Sri Lanka</li></option>
         
-        <option value = "148"><li>Chad</li></option>
+        <option value = "148" class = "recordOption"><li>Chad</li></option>
         
-        <option value = "152"><li>Chile</li></option>
+        <option value = "152" class = "recordOption"><li>Chile</li></option>
         
-        <option value = "156"><li>China</li></option>
+        <option value = "156" class = "recordOption"><li>China</li></option>
         
-        <option value = "158"><li>Other Asia</li></option>
+        <option value = "158" class = "recordOption"><li>Other Asia</li></option>
         
-        <option value = "170"><li>Colombia</li></option>
+        <option value = "170" class = "recordOption"><li>Colombia</li></option>
         
-        <option value = "172"><li>Commonwealth of Independent States (CIS)</li></option>
+        <option value = "172" class = "recordOption"><li>Commonwealth of Independent States (CIS)</li></option>
         
-        <option value = "174"><li>Comoros</li></option>
+        <option value = "174" class = "recordOption"><li>Comoros</li></option>
         
-        <option value = "175"><li>Mayotte</li></option>
+        <option value = "175" class = "recordOption"><li>Mayotte</li></option>
         
-        <option value = "176"><li>Mayotte (up to 2010)</li></option>
+        <option value = "176" class = "recordOption"><li>Mayotte (up to 2010)</li></option>
         
-        <option value = "178"><li>Congo</li></option>
+        <option value = "178" class = "recordOption"><li>Congo</li></option>
         
-        <option value = "180"><li>Democratic Republic of the Congo</li></option>
+        <option value = "180" class = "recordOption"><li>Democratic Republic of the Congo</li></option>
         
-        <option value = "184"><li>Cook Islands</li></option>
+        <option value = "184" class = "recordOption"><li>Cook Islands</li></option>
         
-        <option value = "188"><li>Costa Rica</li></option>
+        <option value = "188" class = "recordOption"><li>Costa Rica</li></option>
         
-        <option value = "191"><li>Croatia</li></option>
+        <option value = "191" class = "recordOption"><li>Croatia</li></option>
         
-        <option value = "192"><li>Cuba</li></option>
+        <option value = "192" class = "recordOption"><li>Cuba</li></option>
         
-        <option value = "196"><li>Cyprus</li></option>
+        <option value = "196" class = "recordOption"><li>Cyprus</li></option>
         
-        <option value = "200"><li>Czechoslovakia [former]</li></option>
+        <option value = "200" class = "recordOption"><li>Czechoslovakia [former]</li></option>
         
-        <option value = "203"><li>Czech Republic</li></option>
+        <option value = "203" class = "recordOption"><li>Czech Republic</li></option>
         
-        <option value = "204"><li>Benin</li></option>
+        <option value = "204" class = "recordOption"><li>Benin</li></option>
         
-        <option value = "208"><li>Denmark</li></option>
+        <option value = "208" class = "recordOption"><li>Denmark</li></option>
         
-        <option value = "212"><li>Dominica</li></option>
+        <option value = "212" class = "recordOption"><li>Dominica</li></option>
         
-        <option value = "214"><li>Dominican Republic</li></option>
+        <option value = "214" class = "recordOption"><li>Dominican Republic</li></option>
         
-        <option value = "218"><li>Ecuador</li></option>
+        <option value = "218" class = "recordOption"><li>Ecuador</li></option>
         
-        <option value = "222"><li>El Salvador</li></option>
+        <option value = "222" class = "recordOption"><li>El Salvador</li></option>
         
-        <option value = "226"><li>Equatorial Guinea</li></option>
+        <option value = "226" class = "recordOption"><li>Equatorial Guinea</li></option>
         
-        <option value = "230"><li>Ethiopia [up to 1993]</li></option>
+        <option value = "230" class = "recordOption"><li>Ethiopia [up to 1993]</li></option>
         
-        <option value = "231"><li>Ethiopia [from 1993]</li></option>
+        <option value = "231" class = "recordOption"><li>Ethiopia [from 1993]</li></option>
         
-        <option value = "232"><li>Eritrea</li></option>
+        <option value = "232" class = "recordOption"><li>Eritrea</li></option>
         
-        <option value = "233"><li>Estonia</li></option>
+        <option value = "233" class = "recordOption"><li>Estonia</li></option>
         
-        <option value = "234"><li>Faeroe Islands</li></option>
+        <option value = "234" class = "recordOption"><li>Faeroe Islands</li></option>
         
-        <option value = "238"><li>Falkland Islands (Malvinas)</li></option>
+        <option value = "238" class = "recordOption"><li>Falkland Islands (Malvinas)</li></option>
         
-        <option value = "242"><li>Fiji</li></option>
+        <option value = "242" class = "recordOption"><li>Fiji</li></option>
         
-        <option value = "246"><li>Finland</li></option>
+        <option value = "246" class = "recordOption"><li>Finland</li></option>
         
-        <option value = "251"><li>France incl. Monaco</li></option>
+        <option value = "251" class = "recordOption"><li>France incl. Monaco</li></option>
         
-        <option value = "254"><li>French Guiana</li></option>
+        <option value = "254" class = "recordOption"><li>French Guiana</li></option>
         
-        <option value = "255"><li>French Guiana (up to 2010)</li></option>
+        <option value = "255" class = "recordOption"><li>French Guiana (up to 2010)</li></option>
         
-        <option value = "258"><li>French Polynesia</li></option>
+        <option value = "258" class = "recordOption"><li>French Polynesia</li></option>
         
-        <option value = "262"><li>Djibouti</li></option>
+        <option value = "262" class = "recordOption"><li>Djibouti</li></option>
         
-        <option value = "266"><li>Gabon</li></option>
+        <option value = "266" class = "recordOption"><li>Gabon</li></option>
         
-        <option value = "268"><li>Georgia</li></option>
+        <option value = "268" class = "recordOption"><li>Georgia</li></option>
         
-        <option value = "270"><li>Gambia</li></option>
+        <option value = "270" class = "recordOption"><li>Gambia</li></option>
         
-        <option value = "275"><li>State of Palestine</li></option>
+        <option value = "275" class = "recordOption"><li>State of Palestine</li></option>
         
-        <option value = "276"><li>Germany</li></option>
+        <option value = "276" class = "recordOption"><li>Germany</li></option>
         
-        <option value = "278"><li>German Democratic Republic [former]</li></option>
+        <option value = "278" class = "recordOption"><li>German Democratic Republic [former]</li></option>
         
-        <option value = "280"><li>Germany, Federal Republic of</li></option>
+        <option value = "280" class = "recordOption"><li>Germany, Federal Republic of</li></option>
         
-        <option value = "288"><li>Ghana</li></option>
+        <option value = "288" class = "recordOption"><li>Ghana</li></option>
         
-        <option value = "292"><li>Gibraltar</li></option>
+        <option value = "292" class = "recordOption"><li>Gibraltar</li></option>
         
-        <option value = "296"><li>Kiribati</li></option>
+        <option value = "296" class = "recordOption"><li>Kiribati</li></option>
         
-        <option value = "300"><li>Greece</li></option>
+        <option value = "300" class = "recordOption"><li>Greece</li></option>
         
-        <option value = "304"><li>Greenland</li></option>
+        <option value = "304" class = "recordOption"><li>Greenland</li></option>
         
-        <option value = "308"><li>Grenada</li></option>
+        <option value = "308" class = "recordOption"><li>Grenada</li></option>
         
-        <option value = "312"><li>Guadeloupe</li></option>
+        <option value = "312" class = "recordOption"><li>Guadeloupe</li></option>
         
-        <option value = "313"><li>Guadeloupe (up to 2010)</li></option>
+        <option value = "313" class = "recordOption"><li>Guadeloupe (up to 2010)</li></option>
         
-        <option value = "316"><li>Guam</li></option>
+        <option value = "316" class = "recordOption"><li>Guam</li></option>
         
-        <option value = "320"><li>Guatemala</li></option>
+        <option value = "320" class = "recordOption"><li>Guatemala</li></option>
         
-        <option value = "324"><li>Guinea</li></option>
+        <option value = "324" class = "recordOption"><li>Guinea</li></option>
         
-        <option value = "328"><li>Guyana</li></option>
+        <option value = "328" class = "recordOption"><li>Guyana</li></option>
         
-        <option value = "332"><li>Haiti</li></option>
+        <option value = "332" class = "recordOption"><li>Haiti</li></option>
         
-        <option value = "340"><li>Honduras</li></option>
+        <option value = "340" class = "recordOption"><li>Honduras</li></option>
         
-        <option value = "344"><li>China, Hong Kong Special Administrative Region</li></option>
+        <option value = "344" class = "recordOption"><li>China, Hong Kong Special Administrative Region</li></option>
         
-        <option value = "348"><li>Hungary</li></option>
+        <option value = "348" class = "recordOption"><li>Hungary</li></option>
         
-        <option value = "352"><li>Iceland</li></option>
+        <option value = "352" class = "recordOption"><li>Iceland</li></option>
         
-        <option value = "356"><li>India</li></option>
+        <option value = "356" class = "recordOption"><li>India</li></option>
         
-        <option value = "360"><li>Indonesia</li></option>
+        <option value = "360" class = "recordOption"><li>Indonesia</li></option>
         
-        <option value = "364"><li>Iran (Islamic Republic of)</li></option>
+        <option value = "364" class = "recordOption"><li>Iran (Islamic Republic of)</li></option>
         
-        <option value = "368"><li>Iraq</li></option>
+        <option value = "368" class = "recordOption"><li>Iraq</li></option>
         
-        <option value = "372"><li>Ireland</li></option>
+        <option value = "372" class = "recordOption"><li>Ireland</li></option>
         
-        <option value = "376"><li>Israel</li></option>
+        <option value = "376" class = "recordOption"><li>Israel</li></option>
         
-        <option value = "382"><li>Italy and San Marino</li></option>
+        <option value = "382" class = "recordOption"><li>Italy and San Marino</li></option>
         
-        <option value = "384"><li>Cote d&#39;Ivoire</li></option>
+        <option value = "384" class = "recordOption"><li>Cote d&#39;Ivoire</li></option>
         
-        <option value = "388"><li>Jamaica</li></option>
+        <option value = "388" class = "recordOption"><li>Jamaica</li></option>
         
-        <option value = "392"><li>Japan</li></option>
+        <option value = "392" class = "recordOption"><li>Japan</li></option>
         
-        <option value = "398"><li>Kazakhstan</li></option>
+        <option value = "398" class = "recordOption"><li>Kazakhstan</li></option>
         
-        <option value = "400"><li>Jordan</li></option>
+        <option value = "400" class = "recordOption"><li>Jordan</li></option>
         
-        <option value = "404"><li>Kenya</li></option>
+        <option value = "404" class = "recordOption"><li>Kenya</li></option>
         
-        <option value = "408"><li>Democratic People&#39;s Republic of Korea</li></option>
+        <option value = "408" class = "recordOption"><li>Democratic People&#39;s Republic of Korea</li></option>
         
-        <option value = "410"><li>Republic of Korea</li></option>
+        <option value = "410" class = "recordOption"><li>Republic of Korea</li></option>
         
-        <option value = "412"><li>Kosovo</li></option>
+        <option value = "412" class = "recordOption"><li>Kosovo</li></option>
         
-        <option value = "414"><li>Kuwait</li></option>
+        <option value = "414" class = "recordOption"><li>Kuwait</li></option>
         
-        <option value = "417"><li>Kyrgyzstan</li></option>
+        <option value = "417" class = "recordOption"><li>Kyrgyzstan</li></option>
         
-        <option value = "418"><li>Lao People&#39;s Democratic Republic</li></option>
+        <option value = "418" class = "recordOption"><li>Lao People&#39;s Democratic Republic</li></option>
         
-        <option value = "422"><li>Lebanon</li></option>
+        <option value = "422" class = "recordOption"><li>Lebanon</li></option>
         
-        <option value = "426"><li>Lesotho</li></option>
+        <option value = "426" class = "recordOption"><li>Lesotho</li></option>
         
-        <option value = "428"><li>Latvia</li></option>
+        <option value = "428" class = "recordOption"><li>Latvia</li></option>
         
-        <option value = "430"><li>Liberia</li></option>
+        <option value = "430" class = "recordOption"><li>Liberia</li></option>
         
-        <option value = "434"><li>Libya</li></option>
+        <option value = "434" class = "recordOption"><li>Libya</li></option>
         
-        <option value = "438"><li>Liechtenstein</li></option>
+        <option value = "438" class = "recordOption"><li>Liechtenstein</li></option>
         
-        <option value = "440"><li>Lithuania</li></option>
+        <option value = "440" class = "recordOption"><li>Lithuania</li></option>
         
-        <option value = "442"><li>Luxembourg</li></option>
+        <option value = "442" class = "recordOption"><li>Luxembourg</li></option>
         
-        <option value = "446"><li>China, Macao Special Administrative Region</li></option>
+        <option value = "446" class = "recordOption"><li>China, Macao Special Administrative Region</li></option>
         
-        <option value = "450"><li>Madagascar</li></option>
+        <option value = "450" class = "recordOption"><li>Madagascar</li></option>
         
-        <option value = "454"><li>Malawi</li></option>
+        <option value = "454" class = "recordOption"><li>Malawi</li></option>
         
-        <option value = "458"><li>Malaysia</li></option>
+        <option value = "458" class = "recordOption"><li>Malaysia</li></option>
         
-        <option value = "462"><li>Maldives</li></option>
+        <option value = "462" class = "recordOption"><li>Maldives</li></option>
         
-        <option value = "466"><li>Mali</li></option>
+        <option value = "466" class = "recordOption"><li>Mali</li></option>
         
-        <option value = "470"><li>Malta</li></option>
+        <option value = "470" class = "recordOption"><li>Malta</li></option>
         
-        <option value = "474"><li>Martinique</li></option>
+        <option value = "474" class = "recordOption"><li>Martinique</li></option>
         
-        <option value = "475"><li>Martinique (up to 2010)</li></option>
+        <option value = "475" class = "recordOption"><li>Martinique (up to 2010)</li></option>
         
-        <option value = "478"><li>Mauritania</li></option>
+        <option value = "478" class = "recordOption"><li>Mauritania</li></option>
         
-        <option value = "480"><li>Mauritius</li></option>
+        <option value = "480" class = "recordOption"><li>Mauritius</li></option>
         
-        <option value = "484"><li>Mexico</li></option>
+        <option value = "484" class = "recordOption"><li>Mexico</li></option>
         
-        <option value = "496"><li>Mongolia</li></option>
+        <option value = "496" class = "recordOption"><li>Mongolia</li></option>
         
-        <option value = "498"><li>Republic of Moldova</li></option>
+        <option value = "498" class = "recordOption"><li>Republic of Moldova</li></option>
         
-        <option value = "499"><li>Montenegro</li></option>
+        <option value = "499" class = "recordOption"><li>Montenegro</li></option>
         
-        <option value = "500"><li>Montserrat</li></option>
+        <option value = "500" class = "recordOption"><li>Montserrat</li></option>
         
-        <option value = "504"><li>Morocco</li></option>
+        <option value = "504" class = "recordOption"><li>Morocco</li></option>
         
-        <option value = "508"><li>Mozambique</li></option>
+        <option value = "508" class = "recordOption"><li>Mozambique</li></option>
         
-        <option value = "512"><li>Oman</li></option>
+        <option value = "512" class = "recordOption"><li>Oman</li></option>
         
-        <option value = "516"><li>Namibia</li></option>
+        <option value = "516" class = "recordOption"><li>Namibia</li></option>
         
-        <option value = "520"><li>Nauru</li></option>
+        <option value = "520" class = "recordOption"><li>Nauru</li></option>
         
-        <option value = "524"><li>Nepal</li></option>
+        <option value = "524" class = "recordOption"><li>Nepal</li></option>
         
-        <option value = "528"><li>Netherlands</li></option>
+        <option value = "528" class = "recordOption"><li>Netherlands</li></option>
         
-        <option value = "530"><li>Netherlands Antilles</li></option>
+        <option value = "530" class = "recordOption"><li>Netherlands Antilles</li></option>
         
-        <option value = "531"><li>Curaçao</li></option>
+        <option value = "531" class = "recordOption"><li>Curaçao</li></option>
         
-        <option value = "533"><li>Aruba</li></option>
+        <option value = "533" class = "recordOption"><li>Aruba</li></option>
         
-        <option value = "534"><li>Sint Maarten (Dutch part)</li></option>
+        <option value = "534" class = "recordOption"><li>Sint Maarten (Dutch part)</li></option>
         
-        <option value = "535"><li>Bonaire, Sint Eustatius and Saba</li></option>
+        <option value = "535" class = "recordOption"><li>Bonaire, Sint Eustatius and Saba</li></option>
         
-        <option value = "540"><li>New Caledonia</li></option>
+        <option value = "540" class = "recordOption"><li>New Caledonia</li></option>
         
-        <option value = "548"><li>Vanuatu</li></option>
+        <option value = "548" class = "recordOption"><li>Vanuatu</li></option>
         
-        <option value = "554"><li>New Zealand</li></option>
+        <option value = "554" class = "recordOption"><li>New Zealand</li></option>
         
-        <option value = "558"><li>Nicaragua</li></option>
+        <option value = "558" class = "recordOption"><li>Nicaragua</li></option>
         
-        <option value = "562"><li>Niger</li></option>
+        <option value = "562" class = "recordOption"><li>Niger</li></option>
         
-        <option value = "566"><li>Nigeria</li></option>
+        <option value = "566" class = "recordOption"><li>Nigeria</li></option>
         
-        <option value = "570"><li>Niue</li></option>
+        <option value = "570" class = "recordOption"><li>Niue</li></option>
         
-        <option value = "579"><li>Norway including Svalbard and Jan Mayen Islands</li></option>
+        <option value = "579" class = "recordOption"><li>Norway including Svalbard and Jan Mayen Islands</li></option>
         
-        <option value = "580"><li>Northern Mariana Islands</li></option>
+        <option value = "580" class = "recordOption"><li>Northern Mariana Islands</li></option>
         
-        <option value = "582"><li>Pacific Islands (Trust Territory)</li></option>
+        <option value = "582" class = "recordOption"><li>Pacific Islands (Trust Territory)</li></option>
         
-        <option value = "583"><li>Micronesia, Federated States of</li></option>
+        <option value = "583" class = "recordOption"><li>Micronesia, Federated States of</li></option>
         
-        <option value = "584"><li>Marshall Islands</li></option>
+        <option value = "584" class = "recordOption"><li>Marshall Islands</li></option>
         
-        <option value = "585"><li>Palau</li></option>
+        <option value = "585" class = "recordOption"><li>Palau</li></option>
         
-        <option value = "586"><li>Pakistan</li></option>
+        <option value = "586" class = "recordOption"><li>Pakistan</li></option>
         
-        <option value = "591"><li>Panama</li></option>
+        <option value = "591" class = "recordOption"><li>Panama</li></option>
         
-        <option value = "598"><li>Papua New Guinea</li></option>
+        <option value = "598" class = "recordOption"><li>Papua New Guinea</li></option>
         
-        <option value = "600"><li>Paraguay</li></option>
+        <option value = "600" class = "recordOption"><li>Paraguay</li></option>
         
-        <option value = "604"><li>Peru</li></option>
+        <option value = "604" class = "recordOption"><li>Peru</li></option>
         
-        <option value = "608"><li>Philippines</li></option>
+        <option value = "608" class = "recordOption"><li>Philippines</li></option>
         
-        <option value = "616"><li>Poland</li></option>
+        <option value = "616" class = "recordOption"><li>Poland</li></option>
         
-        <option value = "620"><li>Portugal</li></option>
+        <option value = "620" class = "recordOption"><li>Portugal</li></option>
         
-        <option value = "624"><li>Guinea-Bissau</li></option>
+        <option value = "624" class = "recordOption"><li>Guinea-Bissau</li></option>
         
-        <option value = "626"><li>Timor-Leste</li></option>
+        <option value = "626" class = "recordOption"><li>Timor-Leste</li></option>
         
-        <option value = "630"><li>Puerto Rico</li></option>
+        <option value = "630" class = "recordOption"><li>Puerto Rico</li></option>
         
-        <option value = "634"><li>Qatar</li></option>
+        <option value = "634" class = "recordOption"><li>Qatar</li></option>
         
-        <option value = "638"><li>Reunion</li></option>
+        <option value = "638" class = "recordOption"><li>Reunion</li></option>
         
-        <option value = "639"><li>Reunion (up to 2010)</li></option>
+        <option value = "639" class = "recordOption"><li>Reunion (up to 2010)</li></option>
         
-        <option value = "642"><li>Romania</li></option>
+        <option value = "642" class = "recordOption"><li>Romania</li></option>
         
-        <option value = "643"><li>Russian Federation</li></option>
+        <option value = "643" class = "recordOption"><li>Russian Federation</li></option>
         
-        <option value = "646"><li>Rwanda</li></option>
+        <option value = "646" class = "recordOption"><li>Rwanda</li></option>
         
-        <option value = "654"><li>Saint Helena</li></option>
+        <option value = "654" class = "recordOption"><li>Saint Helena</li></option>
         
-        <option value = "659"><li>Saint Kitts and Nevis</li></option>
+        <option value = "659" class = "recordOption"><li>Saint Kitts and Nevis</li></option>
         
-        <option value = "660"><li>Anguilla</li></option>
+        <option value = "660" class = "recordOption"><li>Anguilla</li></option>
         
-        <option value = "662"><li>Saint Lucia</li></option>
+        <option value = "662" class = "recordOption"><li>Saint Lucia</li></option>
         
-        <option value = "666"><li>Saint Pierre and Miquelon</li></option>
+        <option value = "666" class = "recordOption"><li>Saint Pierre and Miquelon</li></option>
         
-        <option value = "670"><li>Saint Vincent and the Grenadines</li></option>
+        <option value = "670" class = "recordOption"><li>Saint Vincent and the Grenadines</li></option>
         
-        <option value = "678"><li>Sao Tome and Principe</li></option>
+        <option value = "678" class = "recordOption"><li>Sao Tome and Principe</li></option>
         
-        <option value = "682"><li>Saudi Arabia</li></option>
+        <option value = "682" class = "recordOption"><li>Saudi Arabia</li></option>
         
-        <option value = "686"><li>Senegal</li></option>
+        <option value = "686" class = "recordOption"><li>Senegal</li></option>
         
-        <option value = "688"><li>Serbia</li></option>
+        <option value = "688" class = "recordOption"><li>Serbia</li></option>
         
-        <option value = "690"><li>Seychelles</li></option>
+        <option value = "690" class = "recordOption"><li>Seychelles</li></option>
         
-        <option value = "694"><li>Sierra Leone</li></option>
+        <option value = "694" class = "recordOption"><li>Sierra Leone</li></option>
         
-        <option value = "702"><li>Singapore</li></option>
+        <option value = "702" class = "recordOption"><li>Singapore</li></option>
         
-        <option value = "703"><li>Slovakia</li></option>
+        <option value = "703" class = "recordOption"><li>Slovakia</li></option>
         
-        <option value = "704"><li>Viet Nam</li></option>
+        <option value = "704" class = "recordOption"><li>Viet Nam</li></option>
         
-        <option value = "705"><li>Slovenia</li></option>
+        <option value = "705" class = "recordOption"><li>Slovenia</li></option>
         
-        <option value = "706"><li>Somalia</li></option>
+        <option value = "706" class = "recordOption"><li>Somalia</li></option>
         
-        <option value = "710"><li>South Africa</li></option>
+        <option value = "710" class = "recordOption"><li>South Africa</li></option>
         
-        <option value = "716"><li>Zimbabwe</li></option>
+        <option value = "716" class = "recordOption"><li>Zimbabwe</li></option>
         
-        <option value = "720"><li>Democratic Yemen [former]</li></option>
+        <option value = "720" class = "recordOption"><li>Democratic Yemen [former]</li></option>
         
-        <option value = "724"><li>Spain</li></option>
+        <option value = "724" class = "recordOption"><li>Spain</li></option>
         
-        <option value = "728"><li>South Sudan</li></option>
+        <option value = "728" class = "recordOption"><li>South Sudan</li></option>
         
-        <option value = "729"><li>Sudan</li></option>
+        <option value = "729" class = "recordOption"><li>Sudan</li></option>
         
-        <option value = "736"><li>Sudan [up to 2011]</li></option>
+        <option value = "736" class = "recordOption"><li>Sudan [up to 2011]</li></option>
         
-        <option value = "740"><li>Suriname</li></option>
+        <option value = "740" class = "recordOption"><li>Suriname</li></option>
         
-        <option value = "748"><li>Eswatini</li></option>
+        <option value = "748" class = "recordOption"><li>Eswatini</li></option>
         
-        <option value = "752"><li>Sweden</li></option>
+        <option value = "752" class = "recordOption"><li>Sweden</li></option>
         
-        <option value = "757"><li>Switzerland-Liechtenstein</li></option>
+        <option value = "757" class = "recordOption"><li>Switzerland-Liechtenstein</li></option>
         
-        <option value = "760"><li>Syrian Arab Republic</li></option>
+        <option value = "760" class = "recordOption"><li>Syrian Arab Republic</li></option>
         
-        <option value = "762"><li>Tajikistan</li></option>
+        <option value = "762" class = "recordOption"><li>Tajikistan</li></option>
         
-        <option value = "764"><li>Thailand</li></option>
+        <option value = "764" class = "recordOption"><li>Thailand</li></option>
         
-        <option value = "768"><li>Togo</li></option>
+        <option value = "768" class = "recordOption"><li>Togo</li></option>
         
-        <option value = "776"><li>Tonga</li></option>
+        <option value = "776" class = "recordOption"><li>Tonga</li></option>
         
-        <option value = "780"><li>Trinidad and Tobago</li></option>
+        <option value = "780" class = "recordOption"><li>Trinidad and Tobago</li></option>
         
-        <option value = "784"><li>United Arab Emirates</li></option>
+        <option value = "784" class = "recordOption"><li>United Arab Emirates</li></option>
         
-        <option value = "788"><li>Tunisia</li></option>
+        <option value = "788" class = "recordOption"><li>Tunisia</li></option>
         
-        <option value = "792"><li>Turkey</li></option>
+        <option value = "792" class = "recordOption"><li>Turkey</li></option>
         
-        <option value = "795"><li>Turkmenistan</li></option>
+        <option value = "795" class = "recordOption"><li>Turkmenistan</li></option>
         
-        <option value = "796"><li>Turks and Caicos Islands</li></option>
+        <option value = "796" class = "recordOption"><li>Turks and Caicos Islands</li></option>
         
-        <option value = "798"><li>Tuvalu</li></option>
+        <option value = "798" class = "recordOption"><li>Tuvalu</li></option>
         
-        <option value = "800"><li>Uganda</li></option>
+        <option value = "800" class = "recordOption"><li>Uganda</li></option>
         
-        <option value = "804"><li>Ukraine</li></option>
+        <option value = "804" class = "recordOption"><li>Ukraine</li></option>
         
-        <option value = "807"><li>North Macedonia</li></option>
+        <option value = "807" class = "recordOption"><li>North Macedonia</li></option>
         
-        <option value = "810"><li>Union of Soviet Socialist Republics [former]</li></option>
+        <option value = "810" class = "recordOption"><li>Union of Soviet Socialist Republics [former]</li></option>
         
-        <option value = "818"><li>Egypt</li></option>
+        <option value = "818" class = "recordOption"><li>Egypt</li></option>
         
-        <option value = "826"><li>United Kingdom</li></option>
+        <option value = "826" class = "recordOption"><li>United Kingdom</li></option>
         
-        <option value = "831"><li>Guernsey</li></option>
+        <option value = "831" class = "recordOption"><li>Guernsey</li></option>
         
-        <option value = "832"><li>Jersey</li></option>
+        <option value = "832" class = "recordOption"><li>Jersey</li></option>
         
-        <option value = "833"><li>Isle of Man</li></option>
+        <option value = "833" class = "recordOption"><li>Isle of Man</li></option>
         
-        <option value = "834"><li>United Republic of Tanzania</li></option>
+        <option value = "834" class = "recordOption"><li>United Republic of Tanzania</li></option>
         
-        <option value = "840"><li>United States</li></option>
+        <option value = "840" class = "recordOption"><li>United States</li></option>
         
-        <option value = "850"><li>United States Virgin Islands</li></option>
+        <option value = "850" class = "recordOption"><li>United States Virgin Islands</li></option>
         
-        <option value = "854"><li>Burkina Faso</li></option>
+        <option value = "854" class = "recordOption"><li>Burkina Faso</li></option>
         
-        <option value = "858"><li>Uruguay</li></option>
+        <option value = "858" class = "recordOption"><li>Uruguay</li></option>
         
-        <option value = "860"><li>Uzbekistan</li></option>
+        <option value = "860" class = "recordOption"><li>Uzbekistan</li></option>
         
-        <option value = "862"><li>Venezuela</li></option>
+        <option value = "862" class = "recordOption"><li>Venezuela</li></option>
         
-        <option value = "876"><li>Wallis and Futuna Islands</li></option>
+        <option value = "876" class = "recordOption"><li>Wallis and Futuna Islands</li></option>
         
-        <option value = "882"><li>Samoa</li></option>
+        <option value = "882" class = "recordOption"><li>Samoa</li></option>
         
-        <option value = "886"><li>Yemen Arab Republic [former]</li></option>
+        <option value = "886" class = "recordOption"><li>Yemen Arab Republic [former]</li></option>
         
-        <option value = "887"><li>Yemen</li></option>
+        <option value = "887" class = "recordOption"><li>Yemen</li></option>
         
-        <option value = "890"><li>Yugoslavia [former Socialist Federal Republic]</li></option>
+        <option value = "890" class = "recordOption"><li>Yugoslavia [former Socialist Federal Republic]</li></option>
         
-        <option value = "891"><li>Serbia and Montenegro</li></option>
+        <option value = "891" class = "recordOption"><li>Serbia and Montenegro</li></option>
         
-        <option value = "894"><li>Zambia</li></option>
+        <option value = "894" class = "recordOption"><li>Zambia</li></option>
       
       </select>
     
       <div><label for="Commodity code list">Commodity code list</label></div>
      <select name="Commodity code list" id = "Commodity code list" EnableViewState = true><li>Select the filtered attributes of Commodity code list</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "0100"><li>Hard Coal</li></option>
+        <option value = "0100" class = "recordOption"><li>Hard Coal</li></option>
         
-        <option value = "0110"><li>Anthracite</li></option>
+        <option value = "0110" class = "recordOption"><li>Anthracite</li></option>
         
-        <option value = "0121"><li>Coking coal</li></option>
+        <option value = "0121" class = "recordOption"><li>Coking coal</li></option>
         
-        <option value = "0129"><li>Other bituminous coal</li></option>
+        <option value = "0129" class = "recordOption"><li>Other bituminous coal</li></option>
         
-        <option value = "0200"><li>Brown Coal</li></option>
+        <option value = "0200" class = "recordOption"><li>Brown Coal</li></option>
         
-        <option value = "0210"><li>Sub-bituminous coal</li></option>
+        <option value = "0210" class = "recordOption"><li>Sub-bituminous coal</li></option>
         
-        <option value = "0220"><li>Lignite</li></option>
+        <option value = "0220" class = "recordOption"><li>Lignite</li></option>
         
-        <option value = "0311"><li>Coke Oven Coke</li></option>
+        <option value = "0311" class = "recordOption"><li>Coke Oven Coke</li></option>
         
-        <option value = "0312"><li>Gas Coke</li></option>
+        <option value = "0312" class = "recordOption"><li>Gas Coke</li></option>
         
-        <option value = "0320"><li>Patent fuel</li></option>
+        <option value = "0320" class = "recordOption"><li>Patent fuel</li></option>
         
-        <option value = "0330"><li>Brown Coal Briquettes</li></option>
+        <option value = "0330" class = "recordOption"><li>Brown Coal Briquettes</li></option>
         
-        <option value = "0340"><li>Coal Tar</li></option>
+        <option value = "0340" class = "recordOption"><li>Coal Tar</li></option>
         
-        <option value = "0350"><li>Coke Oven Gas</li></option>
+        <option value = "0350" class = "recordOption"><li>Coke Oven Gas</li></option>
         
-        <option value = "0360"><li>Gasworks Gas</li></option>
+        <option value = "0360" class = "recordOption"><li>Gasworks Gas</li></option>
         
-        <option value = "0371"><li>Blast Furnace Gas</li></option>
+        <option value = "0371" class = "recordOption"><li>Blast Furnace Gas</li></option>
         
-        <option value = "0379"><li>Other recovered gases</li></option>
+        <option value = "0379" class = "recordOption"><li>Other recovered gases</li></option>
         
-        <option value = "0390"><li>Other coal products</li></option>
+        <option value = "0390" class = "recordOption"><li>Other coal products</li></option>
         
-        <option value = "1100"><li>Peat</li></option>
+        <option value = "1100" class = "recordOption"><li>Peat</li></option>
         
-        <option value = "1200"><li>Peat Products</li></option>
+        <option value = "1200" class = "recordOption"><li>Peat Products</li></option>
         
-        <option value = "2000"><li>Oil Shale / Oil Sands</li></option>
+        <option value = "2000" class = "recordOption"><li>Oil Shale / Oil Sands</li></option>
         
-        <option value = "3000"><li>Natural Gas (including LNG)</li></option>
+        <option value = "3000" class = "recordOption"><li>Natural Gas (including LNG)</li></option>
         
-        <option value = "4100"><li>Conventional crude oil</li></option>
+        <option value = "4100" class = "recordOption"><li>Conventional crude oil</li></option>
         
-        <option value = "4200"><li>Natural Gas Liquids</li></option>
+        <option value = "4200" class = "recordOption"><li>Natural Gas Liquids</li></option>
         
-        <option value = "4300"><li>Refinery Feedstocks</li></option>
+        <option value = "4300" class = "recordOption"><li>Refinery Feedstocks</li></option>
         
-        <option value = "4400"><li>Additives and Oxygenates</li></option>
+        <option value = "4400" class = "recordOption"><li>Additives and Oxygenates</li></option>
         
-        <option value = "4500"><li>Other hydrocarbons</li></option>
+        <option value = "4500" class = "recordOption"><li>Other hydrocarbons</li></option>
         
-        <option value = "4610"><li>Refinery Gas</li></option>
+        <option value = "4610" class = "recordOption"><li>Refinery Gas</li></option>
         
-        <option value = "4620"><li>Ethane</li></option>
+        <option value = "4620" class = "recordOption"><li>Ethane</li></option>
         
-        <option value = "4630"><li>Liquified Petroleum Gas</li></option>
+        <option value = "4630" class = "recordOption"><li>Liquified Petroleum Gas</li></option>
         
-        <option value = "4640"><li>Naphtha</li></option>
+        <option value = "4640" class = "recordOption"><li>Naphtha</li></option>
         
-        <option value = "4651"><li>Aviation Gasoline</li></option>
+        <option value = "4651" class = "recordOption"><li>Aviation Gasoline</li></option>
         
-        <option value = "4652"><li>Motor Gasoline</li></option>
+        <option value = "4652" class = "recordOption"><li>Motor Gasoline</li></option>
         
-        <option value = "4653"><li>Gasoline-type jet fuel</li></option>
+        <option value = "4653" class = "recordOption"><li>Gasoline-type jet fuel</li></option>
         
-        <option value = "4661"><li>Kerosene-type Jet Fuel</li></option>
+        <option value = "4661" class = "recordOption"><li>Kerosene-type Jet Fuel</li></option>
         
-        <option value = "4669"><li>Other kerosene</li></option>
+        <option value = "4669" class = "recordOption"><li>Other kerosene</li></option>
         
-        <option value = "4670"><li>Gas Oil/ Diesel Oil</li></option>
+        <option value = "4670" class = "recordOption"><li>Gas Oil/ Diesel Oil</li></option>
         
-        <option value = "4680"><li>Fuel Oil</li></option>
+        <option value = "4680" class = "recordOption"><li>Fuel Oil</li></option>
         
-        <option value = "4691"><li>White spirit and special boiling point industrial spirits</li></option>
+        <option value = "4691" class = "recordOption"><li>White spirit and special boiling point industrial spirits</li></option>
         
-        <option value = "4692"><li>Lubricants</li></option>
+        <option value = "4692" class = "recordOption"><li>Lubricants</li></option>
         
-        <option value = "4693"><li>Paraffin waxes</li></option>
+        <option value = "4693" class = "recordOption"><li>Paraffin waxes</li></option>
         
-        <option value = "4694"><li>Petroleum Coke</li></option>
+        <option value = "4694" class = "recordOption"><li>Petroleum Coke</li></option>
         
-        <option value = "4695"><li>Bitumen</li></option>
+        <option value = "4695" class = "recordOption"><li>Bitumen</li></option>
         
-        <option value = "4699"><li>Other oil products n.e.c.</li></option>
+        <option value = "4699" class = "recordOption"><li>Other oil products n.e.c.</li></option>
         
-        <option value = "5110"><li>Fuelwood</li></option>
+        <option value = "5110" class = "recordOption"><li>Fuelwood</li></option>
         
-        <option value = "5120"><li>Bagasse</li></option>
+        <option value = "5120" class = "recordOption"><li>Bagasse</li></option>
         
-        <option value = "5130"><li>Animal waste</li></option>
+        <option value = "5130" class = "recordOption"><li>Animal waste</li></option>
         
-        <option value = "5140"><li>Black liquor</li></option>
+        <option value = "5140" class = "recordOption"><li>Black liquor</li></option>
         
-        <option value = "5150"><li>Other Vegetal Material and Residues</li></option>
+        <option value = "5150" class = "recordOption"><li>Other Vegetal Material and Residues</li></option>
         
-        <option value = "5160"><li>Charcoal</li></option>
+        <option value = "5160" class = "recordOption"><li>Charcoal</li></option>
         
-        <option value = "5210"><li>Biogasoline</li></option>
+        <option value = "5210" class = "recordOption"><li>Biogasoline</li></option>
         
-        <option value = "5212"><li>Of which: biogasoline</li></option>
+        <option value = "5212" class = "recordOption"><li>Of which: biogasoline</li></option>
         
-        <option value = "5220"><li>Biodiesel</li></option>
+        <option value = "5220" class = "recordOption"><li>Biodiesel</li></option>
         
-        <option value = "5222"><li>Of which: biodiesel</li></option>
+        <option value = "5222" class = "recordOption"><li>Of which: biodiesel</li></option>
         
-        <option value = "5230"><li>Bio jet kerosene</li></option>
+        <option value = "5230" class = "recordOption"><li>Bio jet kerosene</li></option>
         
-        <option value = "5232"><li>Of which: bio jet kerosene</li></option>
+        <option value = "5232" class = "recordOption"><li>Of which: bio jet kerosene</li></option>
         
-        <option value = "5290"><li>Other liquid biofuels</li></option>
+        <option value = "5290" class = "recordOption"><li>Other liquid biofuels</li></option>
         
-        <option value = "5300"><li>Biogases</li></option>
+        <option value = "5300" class = "recordOption"><li>Biogases</li></option>
         
-        <option value = "6100"><li>Industrial Waste</li></option>
+        <option value = "6100" class = "recordOption"><li>Industrial Waste</li></option>
         
-        <option value = "6200"><li>Municipal Wastes</li></option>
+        <option value = "6200" class = "recordOption"><li>Municipal Wastes</li></option>
         
-        <option value = "7000"><li>Total Electricity</li></option>
+        <option value = "7000" class = "recordOption"><li>Total Electricity</li></option>
         
-        <option value = "7000G"><li>Geothermal</li></option>
+        <option value = "7000G" class = "recordOption"><li>Geothermal</li></option>
         
-        <option value = "7000H"><li>Hydro</li></option>
+        <option value = "7000H" class = "recordOption"><li>Hydro</li></option>
         
-        <option value = "7000N"><li>Nuclear Electricity</li></option>
+        <option value = "7000N" class = "recordOption"><li>Nuclear Electricity</li></option>
         
-        <option value = "7000O"><li>Tide, wave and ocean electricity</li></option>
+        <option value = "7000O" class = "recordOption"><li>Tide, wave and ocean electricity</li></option>
         
-        <option value = "7000S"><li>Solar Electricity</li></option>
+        <option value = "7000S" class = "recordOption"><li>Solar Electricity</li></option>
         
-        <option value = "7000T"><li>Thermal Electricity</li></option>
+        <option value = "7000T" class = "recordOption"><li>Thermal Electricity</li></option>
         
-        <option value = "7000W"><li>Wind Electricity</li></option>
+        <option value = "7000W" class = "recordOption"><li>Wind Electricity</li></option>
         
-        <option value = "8000"><li>Heat</li></option>
+        <option value = "8000" class = "recordOption"><li>Heat</li></option>
         
-        <option value = "8000T"><li>Heat from combustible fuels</li></option>
+        <option value = "8000T" class = "recordOption"><li>Heat from combustible fuels</li></option>
         
-        <option value = "9101"><li>Uranium</li></option>
+        <option value = "9101" class = "recordOption"><li>Uranium</li></option>
         
-        <option value = "DG"><li>Direct use of geothermal heat</li></option>
+        <option value = "DG" class = "recordOption"><li>Direct use of geothermal heat</li></option>
         
-        <option value = "DS"><li>Direct use of solar thermal heat</li></option>
+        <option value = "DS" class = "recordOption"><li>Direct use of solar thermal heat</li></option>
         
-        <option value = "EC"><li>Electricity, net installed capacity of electric power plants</li></option>
+        <option value = "EC" class = "recordOption"><li>Electricity, net installed capacity of electric power plants</li></option>
         
-        <option value = "GR"><li>Total Refinery Output</li></option>
+        <option value = "GR" class = "recordOption"><li>Total Refinery Output</li></option>
         
-        <option value = "WF"><li>Falling Water</li></option>
+        <option value = "WF" class = "recordOption"><li>Falling Water</li></option>
       
       </select>
     
       <div><label for="Energy transaction code list">Energy transaction code list</label></div>
      <select name="Energy transaction code list" id = "Energy transaction code list" EnableViewState = true><li>Select the filtered attributes of Energy transaction code list</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "01"><li>Production</li></option>
+        <option value = "01" class = "recordOption"><li>Production</li></option>
         
-        <option value = "010"><li>Production from off-shore</li></option>
+        <option value = "010" class = "recordOption"><li>Production from off-shore</li></option>
         
-        <option value = "013"><li>Production from refineries</li></option>
+        <option value = "013" class = "recordOption"><li>Production from refineries</li></option>
         
-        <option value = "014"><li>Production from plants</li></option>
+        <option value = "014" class = "recordOption"><li>Production from plants</li></option>
         
-        <option value = "018"><li>Gross production</li></option>
+        <option value = "018" class = "recordOption"><li>Gross production</li></option>
         
-        <option value = "019"><li>Net Production</li></option>
+        <option value = "019" class = "recordOption"><li>Net Production</li></option>
         
-        <option value = "01BI"><li>Production from biogases</li></option>
+        <option value = "01BI" class = "recordOption"><li>Production from biogases</li></option>
         
-        <option value = "01CL"><li>Production from hard coal</li></option>
+        <option value = "01CL" class = "recordOption"><li>Production from hard coal</li></option>
         
-        <option value = "01CP"><li>Production from solid coal products</li></option>
+        <option value = "01CP" class = "recordOption"><li>Production from solid coal products</li></option>
         
-        <option value = "01CR"><li>Production from crude oil</li></option>
+        <option value = "01CR" class = "recordOption"><li>Production from crude oil</li></option>
         
-        <option value = "01DL"><li>Production from gas oil/diesel oil</li></option>
+        <option value = "01DL" class = "recordOption"><li>Production from gas oil/diesel oil</li></option>
         
-        <option value = "01LB"><li>Production from brown coal</li></option>
+        <option value = "01LB" class = "recordOption"><li>Production from brown coal</li></option>
         
-        <option value = "01LBF"><li>Production from liquid biofuels</li></option>
+        <option value = "01LBF" class = "recordOption"><li>Production from liquid biofuels</li></option>
         
-        <option value = "01MG"><li>Production from manufactured gases</li></option>
+        <option value = "01MG" class = "recordOption"><li>Production from manufactured gases</li></option>
         
-        <option value = "01NG"><li>Production from natural gas</li></option>
+        <option value = "01NG" class = "recordOption"><li>Production from natural gas</li></option>
         
-        <option value = "01NRW"><li>Production from non-renewable waste</li></option>
+        <option value = "01NRW" class = "recordOption"><li>Production from non-renewable waste</li></option>
         
-        <option value = "01OS"><li>Production from oil shale</li></option>
+        <option value = "01OS" class = "recordOption"><li>Production from oil shale</li></option>
         
-        <option value = "01PP"><li>Production from other oil products</li></option>
+        <option value = "01PP" class = "recordOption"><li>Production from other oil products</li></option>
         
-        <option value = "01PT"><li>Production from peat</li></option>
+        <option value = "01PT" class = "recordOption"><li>Production from peat</li></option>
         
-        <option value = "01RF"><li>Production from fuel oil</li></option>
+        <option value = "01RF" class = "recordOption"><li>Production from fuel oil</li></option>
         
-        <option value = "01RW"><li>Production from renewable municipal waste</li></option>
+        <option value = "01RW" class = "recordOption"><li>Production from renewable municipal waste</li></option>
         
-        <option value = "01SBF"><li>Production from solid biofuels</li></option>
+        <option value = "01SBF" class = "recordOption"><li>Production from solid biofuels</li></option>
         
-        <option value = "01BS"><li>Production from bagasse</li></option>
+        <option value = "01BS" class = "recordOption"><li>Production from bagasse</li></option>
         
-        <option value = "022"><li>Receipts from other sources</li></option>
+        <option value = "022" class = "recordOption"><li>Receipts from other sources</li></option>
         
-        <option value = "022H"><li>Of which: Hydrogen</li></option>
+        <option value = "022H" class = "recordOption"><li>Of which: Hydrogen</li></option>
         
-        <option value = "03"><li>Imports</li></option>
+        <option value = "03" class = "recordOption"><li>Imports</li></option>
         
-        <option value = "04"><li>Exports</li></option>
+        <option value = "04" class = "recordOption"><li>Exports</li></option>
         
-        <option value = "051"><li>International marine bunkers</li></option>
+        <option value = "051" class = "recordOption"><li>International marine bunkers</li></option>
         
-        <option value = "052"><li>International aviation bunkers</li></option>
+        <option value = "052" class = "recordOption"><li>International aviation bunkers</li></option>
         
-        <option value = "06"><li>Stock changes</li></option>
+        <option value = "06" class = "recordOption"><li>Stock changes</li></option>
         
-        <option value = "07"><li>Transfers and recycled products</li></option>
+        <option value = "07" class = "recordOption"><li>Transfers and recycled products</li></option>
         
-        <option value = "08"><li>Transformation</li></option>
+        <option value = "08" class = "recordOption"><li>Transformation</li></option>
         
-        <option value = "081"><li>Transformation in coke ovens</li></option>
+        <option value = "081" class = "recordOption"><li>Transformation in coke ovens</li></option>
         
-        <option value = "082"><li>Transformation in gas works</li></option>
+        <option value = "082" class = "recordOption"><li>Transformation in gas works</li></option>
         
-        <option value = "083"><li>Transformation in briquetting plants</li></option>
+        <option value = "083" class = "recordOption"><li>Transformation in briquetting plants</li></option>
         
-        <option value = "084"><li>Transformation in blast furnaces</li></option>
+        <option value = "084" class = "recordOption"><li>Transformation in blast furnaces</li></option>
         
-        <option value = "085CH"><li>Transformation in charcoal plants</li></option>
+        <option value = "085CH" class = "recordOption"><li>Transformation in charcoal plants</li></option>
         
-        <option value = "085EP"><li>Used for electricity production</li></option>
+        <option value = "085EP" class = "recordOption"><li>Used for electricity production</li></option>
         
-        <option value = "085GL"><li>Transformation in gas-to-liquid (GTL) plants</li></option>
+        <option value = "085GL" class = "recordOption"><li>Transformation in gas-to-liquid (GTL) plants</li></option>
         
-        <option value = "085LP"><li>Transformation in coal liquefaction plants</li></option>
+        <option value = "085LP" class = "recordOption"><li>Transformation in coal liquefaction plants</li></option>
         
-        <option value = "085PP"><li>Transformation in petrochemical plants</li></option>
+        <option value = "085PP" class = "recordOption"><li>Transformation in petrochemical plants</li></option>
         
-        <option value = "086"><li>Transformation in oil refineries</li></option>
+        <option value = "086" class = "recordOption"><li>Transformation in oil refineries</li></option>
         
-        <option value = "087"><li>Transformation in natural gas blending plants</li></option>
+        <option value = "087" class = "recordOption"><li>Transformation in natural gas blending plants</li></option>
         
-        <option value = "088"><li>Transformation in electricity, CHP and heat plants</li></option>
+        <option value = "088" class = "recordOption"><li>Transformation in electricity, CHP and heat plants</li></option>
         
-        <option value = "08811"><li>Transformation in electricity plants - main activity producers</li></option>
+        <option value = "08811" class = "recordOption"><li>Transformation in electricity plants - main activity producers</li></option>
         
-        <option value = "08812"><li>Transformation in electricity plants - autoproducers</li></option>
+        <option value = "08812" class = "recordOption"><li>Transformation in electricity plants - autoproducers</li></option>
         
-        <option value = "08821"><li>Transformation in CHP plants - main activity producers</li></option>
+        <option value = "08821" class = "recordOption"><li>Transformation in CHP plants - main activity producers</li></option>
         
-        <option value = "08822"><li>Transformation in CHP plants - autoproducers</li></option>
+        <option value = "08822" class = "recordOption"><li>Transformation in CHP plants - autoproducers</li></option>
         
-        <option value = "08831"><li>Transformation in heat plants - main activity producers</li></option>
+        <option value = "08831" class = "recordOption"><li>Transformation in heat plants - main activity producers</li></option>
         
-        <option value = "08832"><li>Transformation in heat plants - autoproducers</li></option>
+        <option value = "08832" class = "recordOption"><li>Transformation in heat plants - autoproducers</li></option>
         
-        <option value = "0889E"><li>Used for electric boilers</li></option>
+        <option value = "0889E" class = "recordOption"><li>Used for electric boilers</li></option>
         
-        <option value = "0889H"><li>Used for heat pumps</li></option>
+        <option value = "0889H" class = "recordOption"><li>Used for heat pumps</li></option>
         
-        <option value = "089"><li>Other transformation</li></option>
+        <option value = "089" class = "recordOption"><li>Other transformation</li></option>
         
-        <option value = "09"><li>Energy industries own use</li></option>
+        <option value = "09" class = "recordOption"><li>Energy industries own use</li></option>
         
-        <option value = "0911"><li>Own use by coal mines</li></option>
+        <option value = "0911" class = "recordOption"><li>Own use by coal mines</li></option>
         
-        <option value = "0912"><li>Own use by oil and gas extraction</li></option>
+        <option value = "0912" class = "recordOption"><li>Own use by oil and gas extraction</li></option>
         
-        <option value = "0914"><li>Own use by biogas production plants</li></option>
+        <option value = "0914" class = "recordOption"><li>Own use by biogas production plants</li></option>
         
-        <option value = "0915"><li>Own use by nuclear fuel extraction and processing</li></option>
+        <option value = "0915" class = "recordOption"><li>Own use by nuclear fuel extraction and processing</li></option>
         
-        <option value = "0921"><li>Own use by coke ovens</li></option>
+        <option value = "0921" class = "recordOption"><li>Own use by coke ovens</li></option>
         
-        <option value = "0922"><li>Own use by gas works</li></option>
+        <option value = "0922" class = "recordOption"><li>Own use by gas works</li></option>
         
-        <option value = "0923"><li>Own use by briquetting plants</li></option>
+        <option value = "0923" class = "recordOption"><li>Own use by briquetting plants</li></option>
         
-        <option value = "0924"><li>Own use by blast furnaces</li></option>
+        <option value = "0924" class = "recordOption"><li>Own use by blast furnaces</li></option>
         
-        <option value = "0925"><li>Own use by oil refineries</li></option>
+        <option value = "0925" class = "recordOption"><li>Own use by oil refineries</li></option>
         
-        <option value = "0926"><li>Own use by pump-storage plants</li></option>
+        <option value = "0926" class = "recordOption"><li>Own use by pump-storage plants</li></option>
         
-        <option value = "0927"><li>Own use by electricity, CHP and heat plants</li></option>
+        <option value = "0927" class = "recordOption"><li>Own use by electricity, CHP and heat plants</li></option>
         
-        <option value = "0928"><li>Other energy industry own use</li></option>
+        <option value = "0928" class = "recordOption"><li>Other energy industry own use</li></option>
         
-        <option value = "0930"><li>Own use by coal liquefaction plants</li></option>
+        <option value = "0930" class = "recordOption"><li>Own use by coal liquefaction plants</li></option>
         
-        <option value = "0931"><li>Own use by natural gas separation plants</li></option>
+        <option value = "0931" class = "recordOption"><li>Own use by natural gas separation plants</li></option>
         
-        <option value = "0932"><li>Own use by gas-to-liquid (GTL) plants</li></option>
+        <option value = "0932" class = "recordOption"><li>Own use by gas-to-liquid (GTL) plants</li></option>
         
-        <option value = "0933"><li>Own use by charcoal plants</li></option>
+        <option value = "0933" class = "recordOption"><li>Own use by charcoal plants</li></option>
         
-        <option value = "0934"><li>Own use by LNG/regasification plants</li></option>
+        <option value = "0934" class = "recordOption"><li>Own use by LNG/regasification plants</li></option>
         
-        <option value = "101"><li>Losses</li></option>
+        <option value = "101" class = "recordOption"><li>Losses</li></option>
         
-        <option value = "103"><li>Re-injected</li></option>
+        <option value = "103" class = "recordOption"><li>Re-injected</li></option>
         
-        <option value = "104"><li>Flared and vented</li></option>
+        <option value = "104" class = "recordOption"><li>Flared and vented</li></option>
         
-        <option value = "104A"><li>Flared</li></option>
+        <option value = "104A" class = "recordOption"><li>Flared</li></option>
         
-        <option value = "104B"><li>Vented</li></option>
+        <option value = "104B" class = "recordOption"><li>Vented</li></option>
         
-        <option value = "105"><li>Extraction loss shrinkage</li></option>
+        <option value = "105" class = "recordOption"><li>Extraction loss shrinkage</li></option>
         
-        <option value = "131"><li>Refinery capacity</li></option>
+        <option value = "131" class = "recordOption"><li>Refinery capacity</li></option>
         
-        <option value = "133"><li>Total Capacity: Main activity producers and Autoproducers</li></option>
+        <option value = "133" class = "recordOption"><li>Total Capacity: Main activity producers and Autoproducers</li></option>
         
-        <option value = "1331"><li>Nuclear, total</li></option>
+        <option value = "1331" class = "recordOption"><li>Nuclear, total</li></option>
         
-        <option value = "13311"><li>Nuclear, Main activity producers</li></option>
+        <option value = "13311" class = "recordOption"><li>Nuclear, Main activity producers</li></option>
         
-        <option value = "13312"><li>Nuclear, Autoproducers</li></option>
+        <option value = "13312" class = "recordOption"><li>Nuclear, Autoproducers</li></option>
         
-        <option value = "1332"><li>Hydro, total</li></option>
+        <option value = "1332" class = "recordOption"><li>Hydro, total</li></option>
         
-        <option value = "13321"><li>Hydro, Main activity producers</li></option>
+        <option value = "13321" class = "recordOption"><li>Hydro, Main activity producers</li></option>
         
-        <option value = "13322"><li>Hydro, Autoproducers</li></option>
+        <option value = "13322" class = "recordOption"><li>Hydro, Autoproducers</li></option>
         
-        <option value = "1333"><li>Geothermal, total</li></option>
+        <option value = "1333" class = "recordOption"><li>Geothermal, total</li></option>
         
-        <option value = "13331"><li>Geothermal, Main activity producers</li></option>
+        <option value = "13331" class = "recordOption"><li>Geothermal, Main activity producers</li></option>
         
-        <option value = "13332"><li>Geothermal, Autoproducers</li></option>
+        <option value = "13332" class = "recordOption"><li>Geothermal, Autoproducers</li></option>
         
-        <option value = "1334"><li>Combustible Fuels, total</li></option>
+        <option value = "1334" class = "recordOption"><li>Combustible Fuels, total</li></option>
         
-        <option value = "13341"><li>Combustible Fuels, Main activity producers</li></option>
+        <option value = "13341" class = "recordOption"><li>Combustible Fuels, Main activity producers</li></option>
         
-        <option value = "13342"><li>Combustible Fuels, Autoproducers</li></option>
+        <option value = "13342" class = "recordOption"><li>Combustible Fuels, Autoproducers</li></option>
         
-        <option value = "1335"><li>Wind, total</li></option>
+        <option value = "1335" class = "recordOption"><li>Wind, total</li></option>
         
-        <option value = "13351"><li>Wind, Main activity producers</li></option>
+        <option value = "13351" class = "recordOption"><li>Wind, Main activity producers</li></option>
         
-        <option value = "13352"><li>Wind, Autoproducers</li></option>
+        <option value = "13352" class = "recordOption"><li>Wind, Autoproducers</li></option>
         
-        <option value = "1336"><li>Solar, total</li></option>
+        <option value = "1336" class = "recordOption"><li>Solar, total</li></option>
         
-        <option value = "13361"><li>Solar, Main activity producers</li></option>
+        <option value = "13361" class = "recordOption"><li>Solar, Main activity producers</li></option>
         
-        <option value = "13362"><li>Solar, Autoproducers</li></option>
+        <option value = "13362" class = "recordOption"><li>Solar, Autoproducers</li></option>
         
-        <option value = "1337"><li>Tide, wave, marine, total</li></option>
+        <option value = "1337" class = "recordOption"><li>Tide, wave, marine, total</li></option>
         
-        <option value = "13371"><li>Tide, wave, marine, Main activity producers</li></option>
+        <option value = "13371" class = "recordOption"><li>Tide, wave, marine, Main activity producers</li></option>
         
-        <option value = "13372"><li>Tide, wave, marine, Autoproducers</li></option>
+        <option value = "13372" class = "recordOption"><li>Tide, wave, marine, Autoproducers</li></option>
         
-        <option value = "1339"><li>Electricity generating capacity - From other sources</li></option>
+        <option value = "1339" class = "recordOption"><li>Electricity generating capacity - From other sources</li></option>
         
-        <option value = "13391"><li>Electricity generating capacity - From other sources - Main activity producers</li></option>
+        <option value = "13391" class = "recordOption"><li>Electricity generating capacity - From other sources - Main activity producers</li></option>
         
-        <option value = "13392"><li>Electricity generating capacity - From other sources - Autoproducers</li></option>
+        <option value = "13392" class = "recordOption"><li>Electricity generating capacity - From other sources - Autoproducers</li></option>
         
-        <option value = "13PH1"><li>Electricity generating capacity - Pumped hydro - Main activity producers</li></option>
+        <option value = "13PH1" class = "recordOption"><li>Electricity generating capacity - Pumped hydro - Main activity producers</li></option>
         
-        <option value = "13PH2"><li>Electricity generating capacity - Pumped hydro - Autoproducers</li></option>
+        <option value = "13PH2" class = "recordOption"><li>Electricity generating capacity - Pumped hydro - Autoproducers</li></option>
         
-        <option value = "13PV1"><li>Electricity generating capacity - Solar PV - Main activity producers</li></option>
+        <option value = "13PV1" class = "recordOption"><li>Electricity generating capacity - Solar PV - Main activity producers</li></option>
         
-        <option value = "13PV2"><li>Electricity generating capacity - Solar PV - Autoproducers</li></option>
+        <option value = "13PV2" class = "recordOption"><li>Electricity generating capacity - Solar PV - Autoproducers</li></option>
         
-        <option value = "13ST1"><li>Electricity generating capacity - Solar Thermal - Main activity producers</li></option>
+        <option value = "13ST1" class = "recordOption"><li>Electricity generating capacity - Solar Thermal - Main activity producers</li></option>
         
-        <option value = "13ST2"><li>Electricity generating capacity - Solar Thermal - Autoproducers</li></option>
+        <option value = "13ST2" class = "recordOption"><li>Electricity generating capacity - Solar Thermal - Autoproducers</li></option>
         
-        <option value = "15"><li>Total resources in place</li></option>
+        <option value = "15" class = "recordOption"><li>Total resources in place</li></option>
         
-        <option value = "151"><li>Total known resources</li></option>
+        <option value = "151" class = "recordOption"><li>Total known resources</li></option>
         
-        <option value = "1511"><li>Total known resources, Recoverable</li></option>
+        <option value = "1511" class = "recordOption"><li>Total known resources, Recoverable</li></option>
         
-        <option value = "152"><li>Additional resources</li></option>
+        <option value = "152" class = "recordOption"><li>Additional resources</li></option>
         
-        <option value = "161"><li>Reserves from crude petroleum</li></option>
+        <option value = "161" class = "recordOption"><li>Reserves from crude petroleum</li></option>
         
-        <option value = "162"><li>Reserves from oil shale and tar sands</li></option>
+        <option value = "162" class = "recordOption"><li>Reserves from oil shale and tar sands</li></option>
         
-        <option value = "1621"><li>Reserves from oil shale</li></option>
+        <option value = "1621" class = "recordOption"><li>Reserves from oil shale</li></option>
         
-        <option value = "1622"><li>Reserves from tar sands</li></option>
+        <option value = "1622" class = "recordOption"><li>Reserves from tar sands</li></option>
         
-        <option value = "163"><li>Other reserves</li></option>
+        <option value = "163" class = "recordOption"><li>Other reserves</li></option>
         
-        <option value = "17"><li>Total resources of gases</li></option>
+        <option value = "17" class = "recordOption"><li>Total resources of gases</li></option>
         
-        <option value = "181"><li>Reserves of nuclear resources, Reasonably assured</li></option>
+        <option value = "181" class = "recordOption"><li>Reserves of nuclear resources, Reasonably assured</li></option>
         
-        <option value = "182"><li>Reserves of nuclear resources, Estimated additional</li></option>
+        <option value = "182" class = "recordOption"><li>Reserves of nuclear resources, Estimated additional</li></option>
         
-        <option value = "19"><li>Total hydraulic resources</li></option>
+        <option value = "19" class = "recordOption"><li>Total hydraulic resources</li></option>
         
-        <option value = "21"><li>Opening stock level held on national territory</li></option>
+        <option value = "21" class = "recordOption"><li>Opening stock level held on national territory</li></option>
         
-        <option value = "22"><li>Closing stock level held on national territory</li></option>
+        <option value = "22" class = "recordOption"><li>Closing stock level held on national territory</li></option>
         
-        <option value = "CP"><li>Total capacity, Main activity producers</li></option>
+        <option value = "CP" class = "recordOption"><li>Total capacity, Main activity producers</li></option>
         
-        <option value = "CS"><li>Total capacity, Autoproducers</li></option>
+        <option value = "CS" class = "recordOption"><li>Total capacity, Autoproducers</li></option>
         
-        <option value = "EP"><li>Production, Main activity producers total</li></option>
+        <option value = "EP" class = "recordOption"><li>Production, Main activity producers total</li></option>
         
-        <option value = "015C"><li>Production from combustible fuels – Main activity</li></option>
+        <option value = "015C" class = "recordOption"><li>Production from combustible fuels – Main activity</li></option>
         
-        <option value = "015CC"><li>Production from combustible fuels – Main activity – CHP plants</li></option>
+        <option value = "015CC" class = "recordOption"><li>Production from combustible fuels – Main activity – CHP plants</li></option>
         
-        <option value = "015CE"><li>Production from combustible fuels – Main activity – Electricity plants</li></option>
+        <option value = "015CE" class = "recordOption"><li>Production from combustible fuels – Main activity – Electricity plants</li></option>
         
-        <option value = "015CH"><li>Production from combustible fuels – Main activity – Heat plants</li></option>
+        <option value = "015CH" class = "recordOption"><li>Production from combustible fuels – Main activity – Heat plants</li></option>
         
-        <option value = "015EB"><li>Production from electric boilers - Main activity</li></option>
+        <option value = "015EB" class = "recordOption"><li>Production from electric boilers - Main activity</li></option>
         
-        <option value = "015G"><li>Production from Geothermal – Main activity</li></option>
+        <option value = "015G" class = "recordOption"><li>Production from Geothermal – Main activity</li></option>
         
-        <option value = "015GC"><li>Production from Geothermal – Main activity - CHP plants</li></option>
+        <option value = "015GC" class = "recordOption"><li>Production from Geothermal – Main activity - CHP plants</li></option>
         
-        <option value = "015GE"><li>Production from Geothermal – Main activity - Electricity plants</li></option>
+        <option value = "015GE" class = "recordOption"><li>Production from Geothermal – Main activity - Electricity plants</li></option>
         
-        <option value = "015GH"><li>Production from Geothermal – Main activity – Heat plants</li></option>
+        <option value = "015GH" class = "recordOption"><li>Production from Geothermal – Main activity – Heat plants</li></option>
         
-        <option value = "015H"><li>Production from chemical heat/sources – Main activity</li></option>
+        <option value = "015H" class = "recordOption"><li>Production from chemical heat/sources – Main activity</li></option>
         
-        <option value = "015HC"><li>Production from chemical heat/sources – Main activity – CHP plants</li></option>
+        <option value = "015HC" class = "recordOption"><li>Production from chemical heat/sources – Main activity – CHP plants</li></option>
         
-        <option value = "015HE"><li>Production from chemical heat/sources – Main activity – Electricity plants</li></option>
+        <option value = "015HE" class = "recordOption"><li>Production from chemical heat/sources – Main activity – Electricity plants</li></option>
         
-        <option value = "015HP"><li>Production from heat pumps - Main activity</li></option>
+        <option value = "015HP" class = "recordOption"><li>Production from heat pumps - Main activity</li></option>
         
-        <option value = "015HY"><li>Production from Hydro – Main activity</li></option>
+        <option value = "015HY" class = "recordOption"><li>Production from Hydro – Main activity</li></option>
         
-        <option value = "015N"><li>Production from Nuclear – Main activity</li></option>
+        <option value = "015N" class = "recordOption"><li>Production from Nuclear – Main activity</li></option>
         
-        <option value = "015NC"><li>Production from Nuclear – Main activity - CHP plants</li></option>
+        <option value = "015NC" class = "recordOption"><li>Production from Nuclear – Main activity - CHP plants</li></option>
         
-        <option value = "015NE"><li>Production from Nuclear – Main activity - Electricity plants</li></option>
+        <option value = "015NE" class = "recordOption"><li>Production from Nuclear – Main activity - Electricity plants</li></option>
         
-        <option value = "015O"><li>Production from other sources – Main activity</li></option>
+        <option value = "015O" class = "recordOption"><li>Production from other sources – Main activity</li></option>
         
-        <option value = "015OC"><li>Production from other sources – Main activity – CHP plants</li></option>
+        <option value = "015OC" class = "recordOption"><li>Production from other sources – Main activity – CHP plants</li></option>
         
-        <option value = "015OE"><li>Production from other sources – Main activity – Electricity plants</li></option>
+        <option value = "015OE" class = "recordOption"><li>Production from other sources – Main activity – Electricity plants</li></option>
         
-        <option value = "015OH"><li>Production from other sources – Main activity – Heat plants</li></option>
+        <option value = "015OH" class = "recordOption"><li>Production from other sources – Main activity – Heat plants</li></option>
         
-        <option value = "015PH"><li>Of which production from pumped hydro – Main activity</li></option>
+        <option value = "015PH" class = "recordOption"><li>Of which production from pumped hydro – Main activity</li></option>
         
-        <option value = "015S"><li>Production from Solar – Main activity</li></option>
+        <option value = "015S" class = "recordOption"><li>Production from Solar – Main activity</li></option>
         
-        <option value = "015SP"><li>Production from Solar PV – Main activity</li></option>
+        <option value = "015SP" class = "recordOption"><li>Production from Solar PV – Main activity</li></option>
         
-        <option value = "015ST"><li>Production from Solar thermal – Main activity</li></option>
+        <option value = "015ST" class = "recordOption"><li>Production from Solar thermal – Main activity</li></option>
         
-        <option value = "015T"><li>Production from Tide, wave and marine – Main activity</li></option>
+        <option value = "015T" class = "recordOption"><li>Production from Tide, wave and marine – Main activity</li></option>
         
-        <option value = "015W"><li>Production from Wind – Main activity</li></option>
+        <option value = "015W" class = "recordOption"><li>Production from Wind – Main activity</li></option>
         
-        <option value = "GA"><li>Total energy supply</li></option>
+        <option value = "GA" class = "recordOption"><li>Total energy supply</li></option>
         
-        <option value = "NA"><li>Final consumption</li></option>
+        <option value = "NA" class = "recordOption"><li>Final consumption</li></option>
         
-        <option value = "11"><li>Non-energy uses</li></option>
+        <option value = "11" class = "recordOption"><li>Non-energy uses</li></option>
         
-        <option value = "12"><li>Final energy consumption</li></option>
+        <option value = "12" class = "recordOption"><li>Final energy consumption</li></option>
         
-        <option value = "121"><li>Consumption by manufacturing, construction and non-fuel industry</li></option>
+        <option value = "121" class = "recordOption"><li>Consumption by manufacturing, construction and non-fuel industry</li></option>
         
-        <option value = "1211"><li>Consumption by iron and steel</li></option>
+        <option value = "1211" class = "recordOption"><li>Consumption by iron and steel</li></option>
         
-        <option value = "1213"><li>Consumption by chemical and petrochemical</li></option>
+        <option value = "1213" class = "recordOption"><li>Consumption by chemical and petrochemical</li></option>
         
-        <option value = "1214"><li>Consumption by other manuf., const. and non-fuel ind.</li></option>
+        <option value = "1214" class = "recordOption"><li>Consumption by other manuf., const. and non-fuel ind.</li></option>
         
-        <option value = "1214A"><li>Consumption by non-ferrous metals</li></option>
+        <option value = "1214A" class = "recordOption"><li>Consumption by non-ferrous metals</li></option>
         
-        <option value = "1214B"><li>Consumption by non-metallic minerals</li></option>
+        <option value = "1214B" class = "recordOption"><li>Consumption by non-metallic minerals</li></option>
         
-        <option value = "1214C"><li>Consumption by transport equipment</li></option>
+        <option value = "1214C" class = "recordOption"><li>Consumption by transport equipment</li></option>
         
-        <option value = "1214D"><li>Consumption by machinery</li></option>
+        <option value = "1214D" class = "recordOption"><li>Consumption by machinery</li></option>
         
-        <option value = "1214E"><li>Consumption by mining and quarrying</li></option>
+        <option value = "1214E" class = "recordOption"><li>Consumption by mining and quarrying</li></option>
         
-        <option value = "1214F"><li>Consumption by food and tobacco</li></option>
+        <option value = "1214F" class = "recordOption"><li>Consumption by food and tobacco</li></option>
         
-        <option value = "1214G"><li>Consumption by paper, pulp and print</li></option>
+        <option value = "1214G" class = "recordOption"><li>Consumption by paper, pulp and print</li></option>
         
-        <option value = "1214H"><li>Consumption by wood and wood products</li></option>
+        <option value = "1214H" class = "recordOption"><li>Consumption by wood and wood products</li></option>
         
-        <option value = "1214I"><li>Consumption by construction</li></option>
+        <option value = "1214I" class = "recordOption"><li>Consumption by construction</li></option>
         
-        <option value = "1214J"><li>Consumption by textile and leather</li></option>
+        <option value = "1214J" class = "recordOption"><li>Consumption by textile and leather</li></option>
         
-        <option value = "1214O"><li>Consumption not elsewhere specified (industry)</li></option>
+        <option value = "1214O" class = "recordOption"><li>Consumption not elsewhere specified (industry)</li></option>
         
-        <option value = "122"><li>Consumption by transport</li></option>
+        <option value = "122" class = "recordOption"><li>Consumption by transport</li></option>
         
-        <option value = "1221"><li>Consumption by road</li></option>
+        <option value = "1221" class = "recordOption"><li>Consumption by road</li></option>
         
-        <option value = "1222"><li>Consumption by rail</li></option>
+        <option value = "1222" class = "recordOption"><li>Consumption by rail</li></option>
         
-        <option value = "1223"><li>Consumption by domestic aviation</li></option>
+        <option value = "1223" class = "recordOption"><li>Consumption by domestic aviation</li></option>
         
-        <option value = "1224"><li>Consumption by domestic navigation</li></option>
+        <option value = "1224" class = "recordOption"><li>Consumption by domestic navigation</li></option>
         
-        <option value = "1225"><li>Consumption not elsewhere specified (transport)</li></option>
+        <option value = "1225" class = "recordOption"><li>Consumption not elsewhere specified (transport)</li></option>
         
-        <option value = "1226"><li>Consumption by pipeline transport</li></option>
+        <option value = "1226" class = "recordOption"><li>Consumption by pipeline transport</li></option>
         
-        <option value = "123"><li>Consumption by other</li></option>
+        <option value = "123" class = "recordOption"><li>Consumption by other</li></option>
         
-        <option value = "1231"><li>Consumption by households</li></option>
+        <option value = "1231" class = "recordOption"><li>Consumption by households</li></option>
         
-        <option value = "1232"><li>Consumption by agriculture, forestry and fishing</li></option>
+        <option value = "1232" class = "recordOption"><li>Consumption by agriculture, forestry and fishing</li></option>
         
-        <option value = "1234"><li>Consumption not elsewhere specified (other)</li></option>
+        <option value = "1234" class = "recordOption"><li>Consumption not elsewhere specified (other)</li></option>
         
-        <option value = "1235"><li>Consumption by commerce and public services</li></option>
+        <option value = "1235" class = "recordOption"><li>Consumption by commerce and public services</li></option>
         
-        <option value = "O"><li>Gross refinery output</li></option>
+        <option value = "O" class = "recordOption"><li>Gross refinery output</li></option>
         
-        <option value = "SP"><li>Production, Autoproducers total</li></option>
+        <option value = "SP" class = "recordOption"><li>Production, Autoproducers total</li></option>
         
-        <option value = "016C"><li>Production from combustible fuels – Autoproducer</li></option>
+        <option value = "016C" class = "recordOption"><li>Production from combustible fuels – Autoproducer</li></option>
         
-        <option value = "016CC"><li>Production from combustible fuels – Autoproducer – CHP plants</li></option>
+        <option value = "016CC" class = "recordOption"><li>Production from combustible fuels – Autoproducer – CHP plants</li></option>
         
-        <option value = "016CE"><li>Production from combustible fuels – Autoproducer – Electricity plants</li></option>
+        <option value = "016CE" class = "recordOption"><li>Production from combustible fuels – Autoproducer – Electricity plants</li></option>
         
-        <option value = "016CH"><li>Production from combustible fuels – Autoproducer – Heat plants</li></option>
+        <option value = "016CH" class = "recordOption"><li>Production from combustible fuels – Autoproducer – Heat plants</li></option>
         
-        <option value = "016G"><li>Production from Geothermal – Autoproducer</li></option>
+        <option value = "016G" class = "recordOption"><li>Production from Geothermal – Autoproducer</li></option>
         
-        <option value = "016GC"><li>Production from Geothermal – Autoproducer – CHP plants</li></option>
+        <option value = "016GC" class = "recordOption"><li>Production from Geothermal – Autoproducer – CHP plants</li></option>
         
-        <option value = "016GE"><li>Production from Geothermal – Autoproducer – Electricity plants</li></option>
+        <option value = "016GE" class = "recordOption"><li>Production from Geothermal – Autoproducer – Electricity plants</li></option>
         
-        <option value = "016GH"><li>Production from Geothermal – Autoproducer – Heat plants</li></option>
+        <option value = "016GH" class = "recordOption"><li>Production from Geothermal – Autoproducer – Heat plants</li></option>
         
-        <option value = "016H"><li>Production from chemical heat/sources – Autoproducer</li></option>
+        <option value = "016H" class = "recordOption"><li>Production from chemical heat/sources – Autoproducer</li></option>
         
-        <option value = "016HC"><li>Production from chemical heat/sources – Autoproducer – CHP plants</li></option>
+        <option value = "016HC" class = "recordOption"><li>Production from chemical heat/sources – Autoproducer – CHP plants</li></option>
         
-        <option value = "016HE"><li>Production from chemical heat/sources – Autoproducer – Electricity plants</li></option>
+        <option value = "016HE" class = "recordOption"><li>Production from chemical heat/sources – Autoproducer – Electricity plants</li></option>
         
-        <option value = "016HH"><li>Production from chemical heat/sources – Autoproducer – Heat plants</li></option>
+        <option value = "016HH" class = "recordOption"><li>Production from chemical heat/sources – Autoproducer – Heat plants</li></option>
         
-        <option value = "016HY"><li>Production from Hydro – Autoproducer</li></option>
+        <option value = "016HY" class = "recordOption"><li>Production from Hydro – Autoproducer</li></option>
         
-        <option value = "016N"><li>Production from Nuclear – Autoproducer</li></option>
+        <option value = "016N" class = "recordOption"><li>Production from Nuclear – Autoproducer</li></option>
         
-        <option value = "016NC"><li>Production from Nuclear – Autoproducer – CHP plants</li></option>
+        <option value = "016NC" class = "recordOption"><li>Production from Nuclear – Autoproducer – CHP plants</li></option>
         
-        <option value = "016NE"><li>Production from Nuclear – Autoproducer – Electricity plants</li></option>
+        <option value = "016NE" class = "recordOption"><li>Production from Nuclear – Autoproducer – Electricity plants</li></option>
         
-        <option value = "016O"><li>Production from other sources – Autoproducer</li></option>
+        <option value = "016O" class = "recordOption"><li>Production from other sources – Autoproducer</li></option>
         
-        <option value = "016OC"><li>Production from other sources – Autoproducer – CHP plants</li></option>
+        <option value = "016OC" class = "recordOption"><li>Production from other sources – Autoproducer – CHP plants</li></option>
         
-        <option value = "016OE"><li>Production from other sources – Autoproducer – Electricity plants</li></option>
+        <option value = "016OE" class = "recordOption"><li>Production from other sources – Autoproducer – Electricity plants</li></option>
         
-        <option value = "016OH"><li>Production from other sources – Autoproducer – Heat plants</li></option>
+        <option value = "016OH" class = "recordOption"><li>Production from other sources – Autoproducer – Heat plants</li></option>
         
-        <option value = "016PH"><li>Of which production from pumped hydro – Autoproducer</li></option>
+        <option value = "016PH" class = "recordOption"><li>Of which production from pumped hydro – Autoproducer</li></option>
         
-        <option value = "016S"><li>Production from Solar – Autoproducer</li></option>
+        <option value = "016S" class = "recordOption"><li>Production from Solar – Autoproducer</li></option>
         
-        <option value = "016SP"><li>Production from Solar PV – Autoproducer</li></option>
+        <option value = "016SP" class = "recordOption"><li>Production from Solar PV – Autoproducer</li></option>
         
-        <option value = "016ST"><li>Production from Solar thermal – Autoproducer</li></option>
+        <option value = "016ST" class = "recordOption"><li>Production from Solar thermal – Autoproducer</li></option>
         
-        <option value = "016T"><li>Production from Tide, wave and marine – Autoproducer</li></option>
+        <option value = "016T" class = "recordOption"><li>Production from Tide, wave and marine – Autoproducer</li></option>
         
-        <option value = "016W"><li>Production from Wind – Autoproducer</li></option>
+        <option value = "016W" class = "recordOption"><li>Production from Wind – Autoproducer</li></option>
       
       </select>
     
       <div><label for="Unit of Measure code list">Unit of Measure code list</label></div>
      <select name="Unit of Measure code list" id = "Unit of Measure code list" EnableViewState = true><li>Select the filtered attributes of Unit of Measure code list</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
         
-        <option value = "M3"><li>Cubic metres</li></option>
+        <option value = "M3" class = "recordOption"><li>Cubic metres</li></option>
         
-        <option value = "MW"><li>Megawatts</li></option>
+        <option value = "MW" class = "recordOption"><li>Megawatts</li></option>
         
-        <option value = "TJ"><li>Terajoules</li></option>
+        <option value = "TJ" class = "recordOption"><li>Terajoules</li></option>
         
-        <option value = "GWHR"><li>Gigawatt-hours</li></option>
+        <option value = "GWHR" class = "recordOption"><li>Gigawatt-hours</li></option>
         
-        <option value = "TN"><li>Metric Tons</li></option>
+        <option value = "TN" class = "recordOption"><li>Metric Tons</li></option>
       
       </select>
     

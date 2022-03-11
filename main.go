@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"html/template"
+	"strings"
 
 	//"io"
 	"io/ioutil"
@@ -15,7 +16,7 @@ import (
 	//"strings"
 )
 
-var listnames []string = make([]string, 100, 100)
+var listnames []string
 
 //Types for dealing with common elements in undata xml
 type Header struct {
@@ -123,18 +124,40 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		listnames = append(listnames, element.Name)
 		fmt.Print(element.Name + "\n")
 	}
+	fmt.Printf("%#v", listnames)
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
-	f, err := os.Open("templateTest.html")
-	check(err)
-	slice, err := ioutil.ReadAll(f)
-	check(err)
-	w.Write(slice)
-	req := *r
-	check(err)
-	fmt.Printf("%#v", req.Body)
+	if r.Method == "GET" {
+		f, err := os.Open("templateTest.html")
+		check(err)
+		slice, err := ioutil.ReadAll(f)
+		check(err)
+		buf := bytes.NewBuffer(slice)
+		buf.WriteTo(w)
+	} else {
+		r.ParseForm()
+		fmt.Print(r.PostForm)
+		//Metadata features
+		var features []string = make([]string, 0)
+		for _, element := range listnames {
+			fmt.Print(element)
+			features = append(features, r.Form.Get(element))
+		}
+		fmt.Print(features)
+		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
+		fmt.Print(query)
+		for _, element := range features {
+			query = query + element + "."
+		}
+		query = strings.TrimRight(query, ".")
+		fmt.Println("\n\n\n\n" + query)
+		resp, err := http.Get(query)
+		fmt.Print(resp.Body)
+		check(err)
+		fmt.Print(resp.Body)
 
+	}
 }
 
 func searchPath(path string, r *http.Request) string {
@@ -151,9 +174,6 @@ func retrieveFile(w http.ResponseWriter, r *http.Request) {
 	check(err)
 	fmt.Print(buf.String())
 	w.Write(buf.Bytes())
-	err = r.ParseForm()
-	check(err)
-	fmt.Print(r.PostForm)
 }
 
 func main() {

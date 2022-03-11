@@ -4,20 +4,21 @@
   <script src = "https://code.jquery.com/jquery-3.6.0.js"></script>
 
 </header>
-<form id = "Paramform"method = "POST">  
+<form id = "Paramform"method = "POST"> 
+  <script>
+    $("recordOption").on('click', function(event) {
+        event.stopPropagation()
+        event.stopImmediatePropagation()
+        console.log($(this).val());
+    }); 
+  </script> 
   <ul id = "Paramselect">
     {{range .CodeStructures.CodeLists.CodeLists}}
       <div><label for="{{.Name}}">{{.Name}}</label></div>
      <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
-      <script>
-        $("select").on({
-        change: function() {
-            console.log($(this).val());
-        }
-        }); 
-      </script>
+      
       {{range .Codes}}  
-        <option value = "{{.Id}}"><li>{{.CommonName}}</li></option>
+        <option value = "{{.Id}}" class = "recordOption"><li>{{.CommonName}}</li></option>
       {{end}}
       </select>
     {{end}}
