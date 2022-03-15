@@ -18,7 +18,7 @@
      <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
       
       {{range .Codes}}  
-        <option value = "{{.Id}}" class = "recordOption"><li>{{.CommonName}}</li></option>
+        <option value = "{{.Id}}" class = "recordOption"><li>{{.Id}}</li></option>
       {{end}}
       </select>
     {{end}}

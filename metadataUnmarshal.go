@@ -11,6 +11,34 @@ type CodeStructure struct {
 type CodeStructures struct {
 	XMLName   xml.Name  `xml:"Structures"`
 	CodeLists CodeLists `xml:"Codelists"`
+  OrderStructures OrderDatastructures `xml:"Datastructures"`
+}
+
+type OrderDatastructures struct {
+  XmlName xml.Name                 `xml:"Datastructures"`
+  Datastructure OrderDatastructure `xml:"DataStructure"`
+}
+
+type OrderDatastructure struct {
+  XmlName xml.Name `xml:"DataStructure"`
+  QueryOrder DatastructureComponents `xml:"DataStructureComponents"`
+  Id string `xml:"id,attr"`
+}
+
+type DatastructureComponents struct {
+  XmlName xml.Name `xml:"DataStructureComponents"`
+  DimensionList DimensionList `xml:"DimensionList"`
+}
+
+type DimensionList struct {
+  XmlName xml.Name `xml:"DimensionList"`
+  Dimensions []Dimension `xml:"DimensionList>Dimension"`
+}
+
+type Dimension struct {
+  XmlName xml.Name `xml:"Dimension"`
+  Id string `xml:"id,attr"`
+  Position string `xml:"position,attr"` 
 }
 
 type CodeLists struct {

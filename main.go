@@ -117,6 +117,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	check(err)
 	var codestructures *CodeStructure = new(CodeStructure)
 	xml.Unmarshal(reader.Bytes(), codestructures)
+  fmt.Printf("%#v\n\n\n", codestructures)
 	tmpl = template.Must(template.ParseFiles("innerTemplate.html"))
 	tmpl.Execute(f, codestructures)
 	listnames = make([]string, 0)
@@ -124,7 +125,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		listnames = append(listnames, element.Name)
 		fmt.Print(element.Name + "\n")
 	}
-	fmt.Printf("%#v", listnames)
+	
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
@@ -145,13 +146,16 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			features = append(features, r.Form.Get(element))
 		}
 		fmt.Print(features)
-		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
+		query := "https://data.un.org/ws/rest/data/NASEC_IDCFINA_A/"
 		fmt.Print(query)
-		for _, element := range features {
+		for ind, element := range features {
 			query = query + element + "."
+      fmt.Print(ind)
 		}
+    
 		query = strings.TrimRight(query, ".")
 		fmt.Println("\n\n\n\n" + query)
+    
 		resp, err := http.Get(query)
 		fmt.Print(resp.Body)
 		check(err)
