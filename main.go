@@ -17,6 +17,7 @@ import (
 )
 
 var listnames []string
+var listIds []string
 
 //Types for dealing with common elements in undata xml
 type Header struct {
@@ -45,6 +46,17 @@ func check(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func checkList (slice []Dimension, id string, testmap map[string]string) bool{
+  for _, element := range slice {
+    if element.Id == id {
+      return true
+    }else if element.Id == testmap[id] {
+      return true
+    }
+  }
+  return false
 }
 
 func initNameQueryMap() map[string]string {
@@ -121,11 +133,21 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	tmpl = template.Must(template.ParseFiles("innerTemplate.html"))
 	tmpl.Execute(f, codestructures)
 	listnames = make([]string, 0)
-	for _, element := range codestructures.CodeStructures.CodeLists.CodeLists {
+  listIds = make([]string, 0)
+	for _, element := range       codestructures.CodeStructures.CodeLists.CodeLists {
 		listnames = append(listnames, element.Name)
+    listIds = append(listIds, element.Id)
 		fmt.Print(element.Name + "\n")
 	}
-	
+  resp, err = http.Get("https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id)
+  check(err)
+  reader = new(bytes.Buffer)
+  reader.ReadFrom(resp.Body)
+  var termOrder *RSS = new(RSS)
+  xml.Unmarshal(reader.Bytes(), termOrder)
+  fmt.Printf("%#v", termOrder)
+  f, err = os.Create("termOrder.html")
+  f.Write(reader.Bytes())
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
@@ -139,29 +161,56 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		r.ParseForm()
 		fmt.Print(r.PostForm)
-		//Metadata features
-		var features []string = make([]string, 0)
-		for _, element := range listnames {
-			fmt.Print(element)
-			features = append(features, r.Form.Get(element))
-		}
-		fmt.Print(features)
-		query := "https://data.un.org/ws/rest/data/NASEC_IDCFINA_A/"
+    
+		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
 		fmt.Print(query)
-		for ind, element := range features {
-			query = query + element + "."
-      fmt.Print(ind)
+    f, err := os.Open("termOrder.html")
+    check(err)
+		slice, err := ioutil.ReadAll(f)
+    check(err)
+    var RSS *RSS = new(RSS)
+    xml.Unmarshal(slice, RSS)
+    //Metadata features
+		var features []string = make([]string, 0)
+		for ind, element := range listIds {
+			fmt.Println(element + "\n\n")
+      for _,index := range RSS.OrderData.OrderSet.Components.DimensionList{
+        if strings.Index(index.Id,"_") != -1{
+          index.Id = index.Id[strings.Index(index.Id,"_"):]
+        }
+        fmt.Println(index.Id)
+        if strings.Contains(element, index.Id){
+          features = append(features, r.PostForm[listnames[ind]][0] + ".")
+        }
+        
+      }
 		}
+
+    
+    for _, element := range features {
+      query = query + element
+    }
     
 		query = strings.TrimRight(query, ".")
 		fmt.Println("\n\n\n\n" + query)
-    
-		resp, err := http.Get(query)
-		fmt.Print(resp.Body)
-		check(err)
-		fmt.Print(resp.Body)
-
+    client := http.Client{}
+    req, err := http.NewRequest("GET", query, nil)
+    check(err)
+    req.Header.Set("Accept", "text/json")
+    resp, err := client.Do(req)
+    buf := new(bytes.Buffer)
+    buf.ReadFrom(resp.Body)
+    f, err = os.Create("output.json")
+    check(err)
+    buf.WriteTo(f)
+    http.Redirect(w, r, "/output", http.StatusFound)
 	}
+}
+
+func outputGraph(w http.ResponseWriter, r *http.Request){
+  bytes, err := os.ReadFile("graph.html")
+  check(err)
+  w.Write(bytes)
 }
 
 func searchPath(path string, r *http.Request) string {
@@ -169,10 +218,10 @@ func searchPath(path string, r *http.Request) string {
 	return title
 }
 
-func retrieveFile(w http.ResponseWriter, r *http.Request) {
+func retrieveJS(w http.ResponseWriter, r *http.Request) {
 	title := searchPath("javascript", r)
 	buf := new(bytes.Buffer)
-	file, err := os.Open("javascript\\" + title)
+	file, err := os.Open("javascript/" + title)
 	check(err)
 	_, err = buf.ReadFrom(file)
 	check(err)
@@ -180,12 +229,33 @@ func retrieveFile(w http.ResponseWriter, r *http.Request) {
 	w.Write(buf.Bytes())
 }
 
+func retrieveJSON(w http.ResponseWriter, r *http.Request) {
+  title := searchPath("json", r)
+	buf := new(bytes.Buffer)
+	file, err := os.Open(title)
+	check(err)
+	_, err = buf.ReadFrom(file)
+	check(err)
+	w.Write(buf.Bytes())
+}
+
+func retrieveTxt(w http.ResponseWriter, r *http.Request) {
+  title := searchPath("txt", r)
+	buf := new(bytes.Buffer)
+	file, err := os.Open(title + ".txt")
+	check(err)
+	_, err = buf.ReadFrom(file)
+	check(err)
+	w.Write(buf.Bytes())
+}
+
 func main() {
-	http.HandleFunc("/javascript/", retrieveFile)
+	http.HandleFunc("/javascript/", retrieveJS)
 	http.HandleFunc("/view/", getRequest)
 	http.HandleFunc("/", titleDefault)
 	http.HandleFunc("/search/", searchForData)
 	http.HandleFunc("/mdata/", testParameterization)
+  http.HandleFunc("/output/", outputGraph)
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
