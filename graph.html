@@ -7,19 +7,23 @@
   <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
   <script defer>
     async function displayData(dataObj) {
-  console.log("Hello, world");
-var y_list = dataObj.dataSets[0].series["0:0:0:0"].observations
-  var y_in = []
-  console.log(y_list[0].length)
+    console.log("Hello, world");
+    var y_list = dataObj.dataSets[0].series["0:0:0:0"].observations
+    var y_in = []
+    console.log(y_list.length)
   for (let ind = 0; ind < 30; ++ind) {
     console.log(ind)
     var element = y_list[ind]
-    element = element[0]
-    console.log(element)
-    y_in.push(element)
+    if (element != undefined){
+      element = element[0]
+      console.log(element)
+      y_in.push(element)
+    }
+    else{
+      break
+    }
   }
-  y_in.push(300.7)
-  console.log(y_in)
+
   
   var data = [
     {
@@ -40,13 +44,7 @@ var y_list = dataObj.dataSets[0].series["0:0:0:0"].observations
   }
   </script>
 </head>  
-<body>
-  <h1>Project Telescope</h1>
-  <h2>Example Graph</h2>
-  <p1>
-  <br>This is a graph of PFC emissions in australia </br>
-  <br>in gg(gigagrams) of CO2 equivalent</br>
-  </p1>
+<body> 
   <div id="new">
   <p id="myDiv"></p>
   </div>

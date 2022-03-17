@@ -48,15 +48,15 @@ func check(err error) {
 	}
 }
 
-func checkList (slice []Dimension, id string, testmap map[string]string) bool{
-  for _, element := range slice {
-    if element.Id == id {
-      return true
-    }else if element.Id == testmap[id] {
-      return true
-    }
-  }
-  return false
+func checkList(slice []Dimension, id string, testmap map[string]string) bool {
+	for _, element := range slice {
+		if element.Id == id {
+			return true
+		} else if element.Id == testmap[id] {
+			return true
+		}
+	}
+	return false
 }
 
 func initNameQueryMap() map[string]string {
@@ -92,62 +92,64 @@ func CreateDataflow() Dataflow {
 }
 
 func searchForData(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("askForSubject.html"))
-	client := &http.Client{}
-	tmpl.Execute(w, nil)
-	SearchTerm := r.FormValue("SearchTerm")
-	var structures Structure
-	//m := initNameQueryMap()
-	req, err := http.NewRequest("GET", "https://data.un.org/ws/rest/dataflow/", nil)
-	check(err)
+	if r.Method == "GET" {
+		tmpl := template.Must(template.ParseFiles("askForSubject.html"))
+		tmpl.Execute(w, nil)
+	} else {
+		SearchTerm := r.FormValue("SearchTerm")
+		var structures Structure
+		client := http.Client{}
+		req, err := http.NewRequest("GET", "https://data.un.org/ws/rest/dataflow/", nil)
+		check(err)
 
-	resp, err := client.Do(req)
-	check(err)
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(resp.Body)
+		resp, err := client.Do(req)
+		check(err)
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(resp.Body)
 
-	f2, err := os.Open("test.html")
-	check(err)
-	byteVal, err := ioutil.ReadAll(f2)
-	check(err)
-	xml.Unmarshal(byteVal, &structures)
-	element := CreateDataflow()
-	for _, index := range structures.Structures.Flows.Dataflow {
-		fmt.Println(index.Id == SearchTerm)
-		if index.Id == SearchTerm {
-			element = index
+		f2, err := os.Open("test.html")
+		check(err)
+		byteVal, err := ioutil.ReadAll(f2)
+		check(err)
+		xml.Unmarshal(byteVal, &structures)
+		element := CreateDataflow()
+		for _, index := range structures.Structures.Flows.Dataflow {
+			fmt.Println(index.Id == SearchTerm)
+			if index.Id == SearchTerm {
+				element = index
+			}
 		}
+		fmt.Println("\nhttps://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id + "/?references=children\n")
+		req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id+"/?references=children", nil)
+		check(err)
+		resp, err = client.Do(req)
+		check(err)
+		reader := new(bytes.Buffer)
+		reader.ReadFrom(resp.Body)
+		f, err := os.Create("templateTest.html")
+		check(err)
+		var codestructures *CodeStructure = new(CodeStructure)
+		xml.Unmarshal(reader.Bytes(), codestructures)
+		fmt.Printf("%#v\n\n\n", codestructures)
+		tmpl := template.Must(template.ParseFiles("innerTemplate.html"))
+		tmpl.Execute(f, codestructures)
+		listnames = make([]string, 0)
+		listIds = make([]string, 0)
+		for _, element := range codestructures.CodeStructures.CodeLists.CodeLists {
+			listnames = append(listnames, element.Name)
+			listIds = append(listIds, element.Id)
+			fmt.Print(element.Name + "\n")
+		}
+		resp, err = http.Get("https://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id)
+		check(err)
+		reader = new(bytes.Buffer)
+		reader.ReadFrom(resp.Body)
+		f, err = os.Create("termOrder.html")
+		check(err)
+		f.Write(reader.Bytes())
+		http.Redirect(w, r, "/mdata", http.StatusFound)
 	}
-	fmt.Println("\nhttps://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id + "/?references=children\n")
-	req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id+"/?references=children", nil)
-	check(err)
-	resp, err = client.Do(req)
-	check(err)
-	reader := new(bytes.Buffer)
-	reader.ReadFrom(resp.Body)
-	f, err := os.Create("templateTest.html")
-	check(err)
-	var codestructures *CodeStructure = new(CodeStructure)
-	xml.Unmarshal(reader.Bytes(), codestructures)
-  fmt.Printf("%#v\n\n\n", codestructures)
-	tmpl = template.Must(template.ParseFiles("innerTemplate.html"))
-	tmpl.Execute(f, codestructures)
-	listnames = make([]string, 0)
-  listIds = make([]string, 0)
-	for _, element := range       codestructures.CodeStructures.CodeLists.CodeLists {
-		listnames = append(listnames, element.Name)
-    listIds = append(listIds, element.Id)
-		fmt.Print(element.Name + "\n")
-	}
-  resp, err = http.Get("https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id)
-  check(err)
-  reader = new(bytes.Buffer)
-  reader.ReadFrom(resp.Body)
-  var termOrder *RSS = new(RSS)
-  xml.Unmarshal(reader.Bytes(), termOrder)
-  fmt.Printf("%#v", termOrder)
-  f, err = os.Create("termOrder.html")
-  f.Write(reader.Bytes())
+
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
@@ -161,56 +163,66 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		r.ParseForm()
 		fmt.Print(r.PostForm)
-    
+
 		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
 		fmt.Print(query)
-    f, err := os.Open("termOrder.html")
-    check(err)
+		f, err := os.Open("termOrder.html")
+		check(err)
 		slice, err := ioutil.ReadAll(f)
-    check(err)
-    var RSS *RSS = new(RSS)
-    xml.Unmarshal(slice, RSS)
-    //Metadata features
+		check(err)
+		var RSS *RSS = new(RSS)
+		xml.Unmarshal(slice, RSS)
+		//Metadata features
 		var features []string = make([]string, 0)
 		for ind, element := range listIds {
 			fmt.Println(element + "\n\n")
-      for _,index := range RSS.OrderData.OrderSet.Components.DimensionList{
-        if strings.Index(index.Id,"_") != -1{
-          index.Id = index.Id[strings.Index(index.Id,"_"):]
-        }
-        fmt.Println(index.Id)
-        if strings.Contains(element, index.Id){
-          features = append(features, r.PostForm[listnames[ind]][0] + ".")
-        }
-        
-      }
+			for _, index := range RSS.OrderData.OrderSet.Components.DimensionList {
+				if strings.Index(index.Id, "_") != -1 {
+					index.Id = index.Id[strings.Index(index.Id, "_"):]
+				}
+				fmt.Println(index.Id)
+				if strings.Contains(element, index.Id) {
+					features = append(features, r.PostForm[listnames[ind]][0]+".")
+				}
+
+			}
 		}
 
-    
-    for _, element := range features {
-      query = query + element
-    }
-    
+		for _, element := range features {
+			query = query + element
+		}
+
 		query = strings.TrimRight(query, ".")
 		fmt.Println("\n\n\n\n" + query)
-    client := http.Client{}
-    req, err := http.NewRequest("GET", query, nil)
-    check(err)
-    req.Header.Set("Accept", "text/json")
-    resp, err := client.Do(req)
-    buf := new(bytes.Buffer)
-    buf.ReadFrom(resp.Body)
-    f, err = os.Create("output.json")
-    check(err)
-    buf.WriteTo(f)
-    http.Redirect(w, r, "/output", http.StatusFound)
+		client := http.Client{}
+		req, err := http.NewRequest("GET", query, nil)
+		check(err)
+		req.Header.Set("Accept", "text/json")
+		resp, err := client.Do(req)
+		check(err)
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(resp.Body)
+		f, err = os.Create("output.json")
+		check(err)
+		if buf.String() != "NoRecordsFound" {
+			buf.WriteTo(f)
+			http.Redirect(w, r, "/output", http.StatusFound)
+		} else {
+			f, err := os.Open("templateTest.html")
+			check(err)
+			slice, err := ioutil.ReadAll(f)
+			check(err)
+			buf := bytes.NewBuffer(slice)
+			buf.WriteTo(w)
+		}
+
 	}
 }
 
-func outputGraph(w http.ResponseWriter, r *http.Request){
-  bytes, err := os.ReadFile("graph.html")
-  check(err)
-  w.Write(bytes)
+func outputGraph(w http.ResponseWriter, r *http.Request) {
+	bytes, err := os.ReadFile("graph.html")
+	check(err)
+	w.Write(bytes)
 }
 
 func searchPath(path string, r *http.Request) string {
@@ -230,19 +242,9 @@ func retrieveJS(w http.ResponseWriter, r *http.Request) {
 }
 
 func retrieveJSON(w http.ResponseWriter, r *http.Request) {
-  title := searchPath("json", r)
+	title := searchPath("json", r)
 	buf := new(bytes.Buffer)
-	file, err := os.Open(title)
-	check(err)
-	_, err = buf.ReadFrom(file)
-	check(err)
-	w.Write(buf.Bytes())
-}
-
-func retrieveTxt(w http.ResponseWriter, r *http.Request) {
-  title := searchPath("txt", r)
-	buf := new(bytes.Buffer)
-	file, err := os.Open(title + ".txt")
+	file, err := os.Open(title + ".json")
 	check(err)
 	_, err = buf.ReadFrom(file)
 	check(err)
@@ -255,7 +257,8 @@ func main() {
 	http.HandleFunc("/", titleDefault)
 	http.HandleFunc("/search/", searchForData)
 	http.HandleFunc("/mdata/", testParameterization)
-  http.HandleFunc("/output/", outputGraph)
+	http.HandleFunc("/json/", retrieveJSON)
+	http.HandleFunc("/output/", outputGraph)
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
