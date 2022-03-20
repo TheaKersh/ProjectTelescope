@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <form method = "POST"> 
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review</title>
+</head>
+<body>
+  <div>You have chosen to select DF_UNDATA_ENERGY as your data for your independent variable</div>
+  <div id = values>Parameterized by the below value</div>
+  {{range $key, $value := .}}
+    <label for = $key><li>{{ $key }}</li></label>
+    <div id = $key><li>{{ $value }}</li></div>
+  {{ end }}
+  <label for = confirm>Press enter or click the below button to select your next dataset</label>
+  <Button method = "POST">Next</Button>
+  <div></div>
+</form>
+  
+
+</body>
+</html>

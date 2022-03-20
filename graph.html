@@ -4,49 +4,116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Telescope</title>
+  <style>
+    p.graph{
+     border : 1px solid #000000;
+    }
+    .h1#graphHeader{
+      font-family: "Times New Roman", Times, serif;
+    }
+
+  </style>
   <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
   <script defer>
-    async function displayData(dataObj) {
-    console.log("Hello, world");
-    var y_list = dataObj.dataSets[0].series["0:0:0:0"].observations
-    var y_in = []
+  function extractFrom(from){
+      var list = from.dataSets[0].series["0:0:0:0"].observations
+       var retVal = [];
+      for (let ind = 0; ind < 1000; ++ind){
+        var element = y_list[ind]
+        if (element != undefined){
+          element = element[0]
+          retVal.push(element)
+        }
+        else{
+          break
+        }
+      }
+      return retVal;
+    };
+    
+  function displayData(x_var, y_var) {
+    document.getElementById("tst").innerHTML = "Test3!";
+    x_list = x_var.dataSets[0].series["0:0:0:0"].observations
+    x_vals = []
+    for (let ind = 0; ind < 30; ind++){
+      element = x_list[ind]
+      
+      if element != undefined{
+        element = element[0]
+        x_vals.push(element)
+      }
+      else{
+        break
+      }
+      
+    }
+    document.getElementById("tst").innerHTML = "Test4!";
+    var y_list = extractFrom(y_var)
+    document.getElementById("tst").innerHTML = "Test5!";
     console.log(y_list.length)
-  for (let ind = 0; ind < 30; ++ind) {
+  for (let ind = 0; ind < 1000; ++ind) {
     console.log(ind)
-    var element = y_list[ind]
-    if (element != undefined){
-      element = element[0]
-      console.log(element)
-      y_in.push(element)
-    }
-    else{
-      break
-    }
+    var x_list = extractFrom(x_var)
+    var y_list = extractFrom(y_var)
   }
+  var layout = {
+  autosize: true,
+  width: 1200,
+  height: 800,
+  margin: {
+    l: 50,
+    r: 50,
+    b: 100,
+    t: 100,
+    pad: 4
+  },
+  paper_bgcolor: '#FFFFFF',
+  plot_bgcolor: '#FFFFFF',
+  xaxis: {
+    title: {
+      text: 'Time',
+      font: {
+        family: 'Courier New, monospace',
+        size: 18,
+        color: '#7f7f7f'
+      }
+    },
+  },
+  yaxis: {
+    title: {
+      text: 'Production of coal in selected country',
+      font: {
+        family: 'Courier New, monospace',
+        size: 18,
+        color: '#7f7f7f'
+      }
+    }
+  },
+  };
 
   
   var data = [
     {
-      x:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+      x: x_in,
       y: y_in,
       type: 'line'
     }
   ];
   
 
-  Plotly.newPlot('myDiv', data)
-}
-
-  window.onload = () => {
-    fetch("/json/output")
-      .then(response => response.json())
-      .then(displayData);
+    Plotly.newPlot('myDiv', data, layout)
   }
+  function load() {
+    fetch("/json/independent").then(response => response.json()).then(displayData)
+  }
+  window.onload = load()
   </script>
 </head>  
 <body> 
+  <h1 id="graphHeader">Here's your data :)</h1>
+  <label for = "myDiv">Graph :</label> 
   <div id="new">
-  <p id="myDiv"></p>
+  <p id="myDiv" class="graph"></p>
   </div>
 
   <h1>Brief</h1>
@@ -60,5 +127,7 @@
   N. K. , 
   N. W. 
   </p1>
+  <div></div>
+  <div id = "tst"></div>
 </body>
 </html>

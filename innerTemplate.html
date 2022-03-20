@@ -5,13 +5,6 @@
 
 </header>
 <form id = "Paramform"method = "POST"> 
-  <script>
-    $("recordOption").on('click', function(event) {
-        event.stopPropagation()
-        event.stopImmediatePropagation()
-        console.log($(this).val());
-    }); 
-  </script> 
   <ul id = "Paramselect">
     {{range .CodeStructures.CodeLists.CodeLists}}
       <div><label for="{{.Name}}">{{.Name}}</label></div>

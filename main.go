@@ -7,17 +7,22 @@ import (
 	"fmt"
 	"html/template"
 	"strings"
-
+  "net/url"
 	//"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+  "io/fs"
 	//"strings"
 )
 
 var listnames []string
 var listIds []string
+var postForm url.Values
+var executed bool
+
+
 
 //Types for dealing with common elements in undata xml
 type Header struct {
@@ -82,9 +87,7 @@ func getRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func titleDefault(w http.ResponseWriter, r *http.Request) {
-	buf, err := os.ReadFile("index.html")
-	check(err)
-	w.Write(buf)
+  http.Redirect(w, r, "/search/", http.StatusFound)
 }
 
 func CreateDataflow() Dataflow {
@@ -149,7 +152,6 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		f.Write(reader.Bytes())
 		http.Redirect(w, r, "/mdata", http.StatusFound)
 	}
-
 }
 
 func testParameterization(w http.ResponseWriter, r *http.Request) {
@@ -163,7 +165,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		r.ParseForm()
 		fmt.Print(r.PostForm)
-
+    postForm = r.PostForm
 		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
 		fmt.Print(query)
 		f, err := os.Open("termOrder.html")
@@ -184,7 +186,6 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 				if strings.Contains(element, index.Id) {
 					features = append(features, r.PostForm[listnames[ind]][0]+".")
 				}
-
 			}
 		}
 
@@ -202,11 +203,18 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(resp.Body)
-		f, err = os.Create("output.json")
+    f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
+    check(err)
+    f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
+    if executed {
+      buf.WriteTo(f2)
+    }else{
+      buf.WriteTo(f)
+    }
 		if buf.String() != "NoRecordsFound" {
-			buf.WriteTo(f)
-			http.Redirect(w, r, "/output", http.StatusFound)
+			_, err = f.Write(buf.Bytes())
+      check(err)
 		} else {
 			f, err := os.Open("templateTest.html")
 			check(err)
@@ -215,8 +223,23 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			buf := bytes.NewBuffer(slice)
 			buf.WriteTo(w)
 		}
-
+    if executed {
+      http.Redirect(w, r, "/output/", http.StatusFound)
+    }else {
+      http.Redirect(w, r, "/confirm/", http.StatusFound)
+    }
+    executed = !executed
 	}
+}
+
+
+func IntermediateStep(w http.ResponseWriter, r *http.Request) {
+  if r.Method == "GET"{
+    tmpl := template.Must(template.ParseFiles("dataReview.html"))
+    tmpl.Execute(w, postForm)
+  }else {
+    http.Redirect(w, r, "/search", http.StatusFound)
+  }
 }
 
 func outputGraph(w http.ResponseWriter, r *http.Request) {
@@ -259,6 +282,7 @@ func main() {
 	http.HandleFunc("/mdata/", testParameterization)
 	http.HandleFunc("/json/", retrieveJSON)
 	http.HandleFunc("/output/", outputGraph)
+  http.HandleFunc("/confirm/", IntermediateStep)
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
