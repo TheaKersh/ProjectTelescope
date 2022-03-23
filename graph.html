@@ -31,14 +31,14 @@
       return retVal;
     };
     
-  function displayData(x_var, y_var) {
+  async function displayData(x_var, y_var) {
     document.getElementById("tst").innerHTML = "Test3!";
     x_list = x_var.dataSets[0].series["0:0:0:0"].observations
     x_vals = []
     for (let ind = 0; ind < 30; ind++){
       element = x_list[ind]
       
-      if element != undefined{
+      if (element != undefined){
         element = element[0]
         x_vals.push(element)
       }
@@ -47,15 +47,19 @@
       }
       
     }
-    document.getElementById("tst").innerHTML = "Test4!";
-    var y_list = extractFrom(y_var)
-    document.getElementById("tst").innerHTML = "Test5!";
-    console.log(y_list.length)
-  for (let ind = 0; ind < 1000; ++ind) {
-    console.log(ind)
-    var x_list = extractFrom(x_var)
-    var y_list = extractFrom(y_var)
-  }
+    y_list = x_var.dataSets[0].series["0:0:0:0"].observations
+    y_vals = []
+    for (ind = 0; ind < 30; ind++){
+      element = y_list[ind]
+      
+      if (element != undefined){
+        element = element[0]
+        y_vals.push(element)
+      }
+      else{
+        break
+      }
+    }
   var layout = {
   autosize: true,
   width: 1200,
@@ -91,11 +95,12 @@
   },
   };
 
+
   
   var data = [
     {
-      x: x_in,
-      y: y_in,
+      x: x_vals,
+      y: y_vals,
       type: 'line'
     }
   ];
@@ -103,8 +108,10 @@
 
     Plotly.newPlot('myDiv', data, layout)
   }
-  function load() {
-    fetch("/json/independent").then(response => response.json()).then(displayData)
+  async function load() {
+    fetch("/json/independent")
+      .then(response => response.json())
+      .then(data => JSON.parse(data))
   }
   window.onload = load()
   </script>

@@ -6,14 +6,15 @@ import (
 	"encoding/xml"
 	"fmt"
 	"html/template"
+	"net/url"
 	"strings"
-  "net/url"
+
 	//"io"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-  "io/fs"
 	//"strings"
 )
 
@@ -21,8 +22,6 @@ var listnames []string
 var listIds []string
 var postForm url.Values
 var executed bool
-
-
 
 //Types for dealing with common elements in undata xml
 type Header struct {
@@ -87,7 +86,7 @@ func getRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func titleDefault(w http.ResponseWriter, r *http.Request) {
-  http.Redirect(w, r, "/search/", http.StatusFound)
+	http.Redirect(w, r, "/search/", http.StatusFound)
 }
 
 func CreateDataflow() Dataflow {
@@ -165,7 +164,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		r.ParseForm()
 		fmt.Print(r.PostForm)
-    postForm = r.PostForm
+		postForm = r.PostForm
 		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
 		fmt.Print(query)
 		f, err := os.Open("termOrder.html")
@@ -203,18 +202,22 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(resp.Body)
-    f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
-    check(err)
-    f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
+		fmt.Print(buf.String())
+
+		f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
-    if executed {
-      buf.WriteTo(f2)
-    }else{
-      buf.WriteTo(f)
-    }
+		f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
+		check(err)
+		if executed {
+			_, err = buf.WriteTo(f2)
+			check(err)
+		} else {
+			_, err = buf.WriteTo(f)
+			check(err)
+		}
 		if buf.String() != "NoRecordsFound" {
 			_, err = f.Write(buf.Bytes())
-      check(err)
+			check(err)
 		} else {
 			f, err := os.Open("templateTest.html")
 			check(err)
@@ -223,23 +226,23 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			buf := bytes.NewBuffer(slice)
 			buf.WriteTo(w)
 		}
-    if executed {
-      http.Redirect(w, r, "/output/", http.StatusFound)
-    }else {
-      http.Redirect(w, r, "/confirm/", http.StatusFound)
-    }
-    executed = !executed
+		if executed {
+			http.Redirect(w, r, "/output/", http.StatusFound)
+		} else {
+			http.Redirect(w, r, "/confirm/", http.StatusFound)
+		}
+		executed = !executed
+		if 
 	}
 }
 
-
 func IntermediateStep(w http.ResponseWriter, r *http.Request) {
-  if r.Method == "GET"{
-    tmpl := template.Must(template.ParseFiles("dataReview.html"))
-    tmpl.Execute(w, postForm)
-  }else {
-    http.Redirect(w, r, "/search", http.StatusFound)
-  }
+	if r.Method == "GET" {
+		tmpl := template.Must(template.ParseFiles("dataReview.html"))
+		tmpl.Execute(w, postForm)
+	} else {
+		http.Redirect(w, r, "/search", http.StatusFound)
+	}
 }
 
 func outputGraph(w http.ResponseWriter, r *http.Request) {
@@ -282,7 +285,7 @@ func main() {
 	http.HandleFunc("/mdata/", testParameterization)
 	http.HandleFunc("/json/", retrieveJSON)
 	http.HandleFunc("/output/", outputGraph)
-  http.HandleFunc("/confirm/", IntermediateStep)
+	http.HandleFunc("/confirm/", IntermediateStep)
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
