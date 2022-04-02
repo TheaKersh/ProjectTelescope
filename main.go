@@ -3,26 +3,26 @@ package main
 import (
 	//"bufio"
 	"bytes"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"html/template"
-	"strings"
-  "net/url"
+	"net/url"
+
 	//"io"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-  "io/fs"
-	//"strings"
+	"strconv"
+	"strings"
 )
 
 var listnames []string
 var listIds []string
 var postForm url.Values
 var executed bool
-
-
 
 //Types for dealing with common elements in undata xml
 type Header struct {
@@ -87,7 +87,42 @@ func getRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func titleDefault(w http.ResponseWriter, r *http.Request) {
-  http.Redirect(w, r, "/search/", http.StatusFound)
+	http.Redirect(w, r, "/search/", http.StatusFound)
+}
+
+func GetFromJson(path string) []float64 {
+	m := new(map[string]interface{})
+	dat, err := os.ReadFile(path)
+	check(err)
+	json.Unmarshal(dat, m)
+	items := (*m)["dataSets"].([]interface{})
+	points := items[0].(map[string]interface{})["series"].(map[string]interface{})["0:0:0:0"].(map[string]interface{})["observations"].(map[string]interface{})
+	inter := make(map[string]float64)
+	for key, value := range points {
+		inter[key] = value.([]interface{})[0].(float64)
+	}
+	list := make([]float64, 31)
+	for key, value := range inter {
+		ind, err := strconv.Atoi(key)
+		check(err)
+		list[ind] = value
+	}
+	return list
+}
+
+func Correl(w http.ResponseWriter, r *http.Request) {
+	toUse := correlationOptions[searchPath("correlation", r)]
+	fmt.Fprint(w, toUse(GetFromJson("independent.json"), GetFromJson("dependent.json")))
+
+}
+
+func Pearsons(x []float64, y []float64) float64 {
+	pearson := constrPearson(x, y)
+	return pearson.Correl()
+}
+
+var correlationOptions map[string]func(x []float64, b []float64) float64 = map[string]func(x []float64, b []float64) float64{
+	"Pearsons": Pearsons,
 }
 
 func CreateDataflow() Dataflow {
@@ -165,7 +200,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		r.ParseForm()
 		fmt.Print(r.PostForm)
-    postForm = r.PostForm
+		postForm = r.PostForm
 		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
 		fmt.Print(query)
 		f, err := os.Open("termOrder.html")
@@ -203,18 +238,18 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(resp.Body)
-    f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
-    check(err)
-    f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
+		f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
-    if executed {
-      buf.WriteTo(f2)
-    }else{
-      buf.WriteTo(f)
-    }
+		f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
+		check(err)
+		if executed {
+			buf.WriteTo(f2)
+		} else {
+			buf.WriteTo(f)
+		}
 		if buf.String() != "NoRecordsFound" {
 			_, err = f.Write(buf.Bytes())
-      check(err)
+			check(err)
 		} else {
 			f, err := os.Open("templateTest.html")
 			check(err)
@@ -223,23 +258,48 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			buf := bytes.NewBuffer(slice)
 			buf.WriteTo(w)
 		}
-    if executed {
-      http.Redirect(w, r, "/output/", http.StatusFound)
-    }else {
-      http.Redirect(w, r, "/confirm/", http.StatusFound)
-    }
-    executed = !executed
+		if executed {
+			http.Redirect(w, r, "/output/", http.StatusFound)
+		} else {
+			http.Redirect(w, r, "/confirm/", http.StatusFound)
+		}
+		executed = !executed
+	}
+}
+func trimJson(path string) {
+	if !strings.Contains(path, ".json") {
+		path = path + ".json"
+	}
+	slice, err := os.ReadFile(path)
+	check(err)
+	depth := 0
+	prevDepth := depth
+	for ind, element := range slice {
+		if rune(element) == '{' {
+			depth++
+		}
+		if rune(element) == '}' {
+			depth--
+		}
+		if prevDepth > depth && depth == 0 {
+			if ind < len(slice) {
+				slice = slice[:ind+1]
+				os.Truncate(path, 0)
+				os.WriteFile(path, slice, fs.ModeAppend)
+			}
+			break
+		}
+		prevDepth = depth
 	}
 }
 
-
 func IntermediateStep(w http.ResponseWriter, r *http.Request) {
-  if r.Method == "GET"{
-    tmpl := template.Must(template.ParseFiles("dataReview.html"))
-    tmpl.Execute(w, postForm)
-  }else {
-    http.Redirect(w, r, "/search", http.StatusFound)
-  }
+	if r.Method == "GET" {
+		tmpl := template.Must(template.ParseFiles("dataReview.html"))
+		tmpl.Execute(w, postForm)
+	} else {
+		http.Redirect(w, r, "/search", http.StatusFound)
+	}
 }
 
 func outputGraph(w http.ResponseWriter, r *http.Request) {
@@ -267,6 +327,7 @@ func retrieveJS(w http.ResponseWriter, r *http.Request) {
 func retrieveJSON(w http.ResponseWriter, r *http.Request) {
 	title := searchPath("json", r)
 	buf := new(bytes.Buffer)
+	trimJson(title + ".json")
 	file, err := os.Open(title + ".json")
 	check(err)
 	_, err = buf.ReadFrom(file)
@@ -282,7 +343,8 @@ func main() {
 	http.HandleFunc("/mdata/", testParameterization)
 	http.HandleFunc("/json/", retrieveJSON)
 	http.HandleFunc("/output/", outputGraph)
-  http.HandleFunc("/confirm/", IntermediateStep)
+	http.HandleFunc("/confirm/", IntermediateStep)
+	http.HandleFunc("/correlation/", Correl)
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
