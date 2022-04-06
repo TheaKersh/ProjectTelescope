@@ -15,29 +15,13 @@
   </style>
   <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
   <script defer>
-  function extractFrom(from){
-      var list = from.dataSets[0].series["0:0:0:0"].observations
-       var retVal = [];
-      for (let ind = 0; ind < 1000; ++ind){
-        var element = y_list[ind]
-        if (element != undefined){
-          element = element[0]
-          retVal.push(element)
-        }
-        else{
-          break
-        }
-      }
-      return retVal;
-    };
     
-  async function displayData(x_var, y_var) {
-    document.getElementById("tst").innerHTML = "Test3!";
+  function displayData(x_var, y_var) {
     x_list = x_var.dataSets[0].series["0:0:0:0"].observations
+    console.log(x_list)
     x_vals = []
     for (let ind = 0; ind < 30; ind++){
       element = x_list[ind]
-      
       if (element != undefined){
         element = element[0]
         x_vals.push(element)
@@ -47,9 +31,10 @@
       }
       
     }
-    y_list = x_var.dataSets[0].series["0:0:0:0"].observations
+    console.log(x_vals)
+    y_list = y_var.dataSets[0].series["0:0:0:0"].observations
     y_vals = []
-    for (ind = 0; ind < 30; ind++){
+    for (let ind = 0; ind < 30; ind++){
       element = y_list[ind]
       
       if (element != undefined){
@@ -58,8 +43,9 @@
       }
       else{
         break
-      }
+      } 
     }
+    console.log(y_vals)
   var layout = {
   autosize: true,
   width: 1200,
@@ -108,12 +94,16 @@
 
     Plotly.newPlot('myDiv', data, layout)
   }
-  async function load() {
-    fetch("/json/independent")
+  async function load(){
+    x_var = await fetch("/json/independent")
       .then(response => response.json())
-      .then(data => JSON.parse(data))
+    y_var = await fetch("/json/dependent")
+      .then(response => response.json())
+    console.log(x_var, y_var)
+    displayData(x_var, y_var)
+    
   }
-  window.onload = load()
+  window.onload = load
   </script>
 </head>  
 <body> 
