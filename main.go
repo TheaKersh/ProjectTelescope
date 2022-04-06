@@ -3,15 +3,11 @@ package main
 import (
 	//"bufio"
 	"bytes"
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"html/template"
 	"net/url"
-<<<<<<< HEAD
 	"strings"
-=======
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
 
 	//"io"
 	"io/fs"
@@ -19,12 +15,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-<<<<<<< HEAD
 	//"strings"
-=======
-	"strconv"
-	"strings"
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
 )
 
 var listnames []string
@@ -39,7 +30,7 @@ type Header struct {
 	Test    string   `xml:"Test"`
 }
 
-//Types to unmarshal and search xml when looking for a specific dataset
+/*Utility functions*/
 func (c CodeStructure) toString() [][]string {
 	var codelists CodeLists = c.CodeStructures.CodeLists
 	var retVal [][]string = make([][]string, 30)
@@ -53,6 +44,10 @@ func (c CodeStructure) toString() [][]string {
 		}
 	}
 	return retVal
+}
+
+func CreateDataflow() Dataflow {
+	return *new(Dataflow)
 }
 
 func check(err error) {
@@ -79,6 +74,16 @@ func initNameQueryMap() map[string]string {
 	return m
 }
 
+// Searches url path for specified string
+func searchPath(path string, r *http.Request) string {
+	title := r.URL.Path[len("/"+path+"/"):]
+	return title
+}
+
+/*Handler functions*/
+
+//Default/Test get for undata
+//Useful for demo/front page
 func getRequest(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://data.un.org/ws/rest/data/DF_UNData_UNFCC/A.EN_ATM_PFCE.AUS.Gg_CO2", nil)
@@ -94,52 +99,14 @@ func getRequest(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Just redirects to search(for now)
 func titleDefault(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/search/", http.StatusFound)
-<<<<<<< HEAD
-=======
 }
 
-func GetFromJson(path string) []float64 {
-	m := new(map[string]interface{})
-	dat, err := os.ReadFile(path)
-	check(err)
-	json.Unmarshal(dat, m)
-	items := (*m)["dataSets"].([]interface{})
-	points := items[0].(map[string]interface{})["series"].(map[string]interface{})["0:0:0:0"].(map[string]interface{})["observations"].(map[string]interface{})
-	inter := make(map[string]float64)
-	for key, value := range points {
-		inter[key] = value.([]interface{})[0].(float64)
-	}
-	list := make([]float64, 31)
-	for key, value := range inter {
-		ind, err := strconv.Atoi(key)
-		check(err)
-		list[ind] = value
-	}
-	return list
-}
-
-func Correl(w http.ResponseWriter, r *http.Request) {
-	toUse := correlationOptions[searchPath("correlation", r)]
-	fmt.Fprint(w, toUse(GetFromJson("independent.json"), GetFromJson("dependent.json")))
-
-}
-
-func Pearsons(x []float64, y []float64) float64 {
-	pearson := constrPearson(x, y)
-	return pearson.Correl()
-}
-
-var correlationOptions map[string]func(x []float64, b []float64) float64 = map[string]func(x []float64, b []float64) float64{
-	"Pearsons": Pearsons,
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
-}
-
-func CreateDataflow() Dataflow {
-	return *new(Dataflow)
-}
-
+//Gets the data set that the user searches for
+//Will eventually feature a more user friendly
+//way of searching
 func searchForData(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		tmpl := template.Must(template.ParseFiles("askForSubject.html"))
@@ -164,7 +131,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		element := CreateDataflow()
 		for _, index := range structures.Structures.Flows.Dataflow {
 			fmt.Println(index.Id == SearchTerm)
-			if index.Id == SearchTerm {
+			if index.Name == SearchTerm {
 				element = index
 			}
 		}
@@ -200,6 +167,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Gets the metadata features and presents them to the user in menu format
 func testParameterization(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		f, err := os.Open("templateTest.html")
@@ -249,27 +217,18 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(resp.Body)
-<<<<<<< HEAD
 		fmt.Print(buf.String())
 
-=======
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
 		f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
 		f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
 		if executed {
-<<<<<<< HEAD
 			_, err = buf.WriteTo(f2)
 			check(err)
 		} else {
 			_, err = buf.WriteTo(f)
 			check(err)
-=======
-			buf.WriteTo(f2)
-		} else {
-			buf.WriteTo(f)
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
 		}
 		if buf.String() != "NoRecordsFound" {
 			_, err = f.Write(buf.Bytes())
@@ -288,39 +247,11 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/confirm/", http.StatusFound)
 		}
 		executed = !executed
-<<<<<<< HEAD
-		if 
-=======
-	}
-}
-func trimJson(path string) {
-	if !strings.Contains(path, ".json") {
-		path = path + ".json"
-	}
-	slice, err := os.ReadFile(path)
-	check(err)
-	depth := 0
-	prevDepth := depth
-	for ind, element := range slice {
-		if rune(element) == '{' {
-			depth++
-		}
-		if rune(element) == '}' {
-			depth--
-		}
-		if prevDepth > depth && depth == 0 {
-			if ind < len(slice) {
-				slice = slice[:ind+1]
-				os.Truncate(path, 0)
-				os.WriteFile(path, slice, fs.ModeAppend)
-			}
-			break
-		}
-		prevDepth = depth
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
 	}
 }
 
+//Confirms to the user that the selected params are correct
+//Not sure whether i'll keep this
 func IntermediateStep(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		tmpl := template.Must(template.ParseFiles("dataReview.html"))
@@ -330,15 +261,11 @@ func IntermediateStep(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Writes html for graph page to receiver (see graph.html for details)
 func outputGraph(w http.ResponseWriter, r *http.Request) {
 	bytes, err := os.ReadFile("graph.html")
 	check(err)
 	w.Write(bytes)
-}
-
-func searchPath(path string, r *http.Request) string {
-	title := r.URL.Path[len("/"+path+"/"):]
-	return title
 }
 
 func retrieveJS(w http.ResponseWriter, r *http.Request) {
@@ -355,7 +282,6 @@ func retrieveJS(w http.ResponseWriter, r *http.Request) {
 func retrieveJSON(w http.ResponseWriter, r *http.Request) {
 	title := searchPath("json", r)
 	buf := new(bytes.Buffer)
-	trimJson(title + ".json")
 	file, err := os.Open(title + ".json")
 	check(err)
 	_, err = buf.ReadFrom(file)
@@ -372,10 +298,6 @@ func main() {
 	http.HandleFunc("/json/", retrieveJSON)
 	http.HandleFunc("/output/", outputGraph)
 	http.HandleFunc("/confirm/", IntermediateStep)
-<<<<<<< HEAD
-=======
-	http.HandleFunc("/correlation/", Correl)
->>>>>>> 9edba4da8db13b36d3d6acd7e84dbf76240a28af
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
