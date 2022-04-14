@@ -3,7 +3,6 @@ package main
 import (
 	//"bufio"
 	"bytes"
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"html/template"
@@ -31,7 +30,7 @@ type Header struct {
 	Test    string   `xml:"Test"`
 }
 
-//Types to unmarshal and search xml when looking for a specific dataset
+/*Utility functions*/
 func (c CodeStructure) toString() [][]string {
 	var codelists CodeLists = c.CodeStructures.CodeLists
 	var retVal [][]string = make([][]string, 30)
@@ -45,6 +44,10 @@ func (c CodeStructure) toString() [][]string {
 		}
 	}
 	return retVal
+}
+
+func CreateDataflow() Dataflow {
+	return *new(Dataflow)
 }
 
 func check(err error) {
@@ -71,6 +74,16 @@ func initNameQueryMap() map[string]string {
 	return m
 }
 
+// Searches url path for specified string
+func searchPath(path string, r *http.Request) string {
+	title := r.URL.Path[len("/"+path+"/"):]
+	return title
+}
+
+/*Handler functions*/
+
+//Default/Test get for undata
+//Useful for demo/front page
 func getRequest(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://data.un.org/ws/rest/data/DF_UNData_UNFCC/A.EN_ATM_PFCE.AUS.Gg_CO2", nil)
@@ -86,14 +99,14 @@ func getRequest(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Just redirects to search(for now)
 func titleDefault(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/search/", http.StatusFound)
 }
 
-func CreateDataflow() Dataflow {
-	return *new(Dataflow)
-}
-
+//Gets the data set that the user searches for
+//Will eventually feature a more user friendly
+//way of searching
 func searchForData(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		tmpl := template.Must(template.ParseFiles("askForSubject.html"))
@@ -118,7 +131,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		element := CreateDataflow()
 		for _, index := range structures.Structures.Flows.Dataflow {
 			fmt.Println(index.Id == SearchTerm)
-			if index.Id == SearchTerm {
+			if index.Name == SearchTerm {
 				element = index
 			}
 		}
@@ -154,6 +167,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Gets the metadata features and presents them to the user in menu format
 func testParameterization(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		f, err := os.Open("templateTest.html")
@@ -233,10 +247,11 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/confirm/", http.StatusFound)
 		}
 		executed = !executed
-		if 
 	}
 }
 
+//Confirms to the user that the selected params are correct
+//Not sure whether i'll keep this
 func IntermediateStep(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		tmpl := template.Must(template.ParseFiles("dataReview.html"))
@@ -246,15 +261,11 @@ func IntermediateStep(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Writes html for graph page to receiver (see graph.html for details)
 func outputGraph(w http.ResponseWriter, r *http.Request) {
 	bytes, err := os.ReadFile("graph.html")
 	check(err)
 	w.Write(bytes)
-}
-
-func searchPath(path string, r *http.Request) string {
-	title := r.URL.Path[len("/"+path+"/"):]
-	return title
 }
 
 func retrieveJS(w http.ResponseWriter, r *http.Request) {
@@ -271,7 +282,6 @@ func retrieveJS(w http.ResponseWriter, r *http.Request) {
 func retrieveJSON(w http.ResponseWriter, r *http.Request) {
 	title := searchPath("json", r)
 	buf := new(bytes.Buffer)
-	trimJson(title + ".json")
 	file, err := os.Open(title + ".json")
 	check(err)
 	_, err = buf.ReadFrom(file)
