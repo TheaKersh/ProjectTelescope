@@ -16,12 +16,14 @@
   <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
   <script defer>
     
-  function displayData(x_var, y_var) {
+  async function displayData(x_var, y_var) {
+    document.getElementById("tst").innerHTML = "Test3!";
     x_list = x_var.dataSets[0].series["0:0:0:0"].observations
     console.log(x_list)
     x_vals = []
     for (let ind = 0; ind < 30; ind++){
       element = x_list[ind]
+      
       if (element != undefined){
         element = element[0]
         x_vals.push(element)
@@ -31,10 +33,9 @@
       }
       
     }
-    console.log(x_vals)
-    y_list = y_var.dataSets[0].series["0:0:0:0"].observations
+    y_list = x_var.dataSets[0].series["0:0:0:0"].observations
     y_vals = []
-    for (let ind = 0; ind < 30; ind++){
+    for (ind = 0; ind < 30; ind++){
       element = y_list[ind]
       
       if (element != undefined){
@@ -43,9 +44,9 @@
       }
       else{
         break
-      } 
+      }
     }
-    console.log(y_vals)
+
   var layout = {
   autosize: true,
   width: 1200,
@@ -81,6 +82,7 @@
   },
   };
 
+
   
   var data = [
     {
@@ -93,14 +95,10 @@
 
     Plotly.newPlot('myDiv', data, layout)
   }
-  async function load(){
-    x_var = await fetch("/json/independent")
+  async function load() {
+    fetch("/json/independent")
       .then(response => response.json())
-    y_var = await fetch("/json/dependent")
-      .then(response => response.json())
-    console.log(x_var, y_var)
-    displayData(x_var, y_var)
-    
+      .then(data => JSON.parse(data))
   }
   window.onload = load
   </script>

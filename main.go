@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/url"
+	"strings"
 
 	//"io"
 	"io/fs"
@@ -15,8 +16,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
-	"strings"
+	//"strings"
 )
 
 var listnames []string
@@ -88,41 +88,6 @@ func getRequest(w http.ResponseWriter, r *http.Request) {
 
 func titleDefault(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/search/", http.StatusFound)
-}
-
-func GetFromJson(path string) []float64 {
-	m := new(map[string]interface{})
-	dat, err := os.ReadFile(path)
-	check(err)
-	json.Unmarshal(dat, m)
-	items := (*m)["dataSets"].([]interface{})
-	points := items[0].(map[string]interface{})["series"].(map[string]interface{})["0:0:0:0"].(map[string]interface{})["observations"].(map[string]interface{})
-	inter := make(map[string]float64)
-	for key, value := range points {
-		inter[key] = value.([]interface{})[0].(float64)
-	}
-	list := make([]float64, 31)
-	for key, value := range inter {
-		ind, err := strconv.Atoi(key)
-		check(err)
-		list[ind] = value
-	}
-	return list
-}
-
-func Correl(w http.ResponseWriter, r *http.Request) {
-	toUse := correlationOptions[searchPath("correlation", r)]
-	fmt.Fprint(w, toUse(GetFromJson("independent.json"), GetFromJson("dependent.json")))
-
-}
-
-func Pearsons(x []float64, y []float64) float64 {
-	pearson := constrPearson(x, y)
-	return pearson.Correl()
-}
-
-var correlationOptions map[string]func(x []float64, b []float64) float64 = map[string]func(x []float64, b []float64) float64{
-	"Pearsons": Pearsons,
 }
 
 func CreateDataflow() Dataflow {
@@ -238,14 +203,18 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(resp.Body)
+		fmt.Print(buf.String())
+
 		f, err = os.OpenFile("independent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
 		f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
 		if executed {
-			buf.WriteTo(f2)
+			_, err = buf.WriteTo(f2)
+			check(err)
 		} else {
-			buf.WriteTo(f)
+			_, err = buf.WriteTo(f)
+			check(err)
 		}
 		if buf.String() != "NoRecordsFound" {
 			_, err = f.Write(buf.Bytes())
@@ -264,32 +233,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/confirm/", http.StatusFound)
 		}
 		executed = !executed
-	}
-}
-func trimJson(path string) {
-	if !strings.Contains(path, ".json") {
-		path = path + ".json"
-	}
-	slice, err := os.ReadFile(path)
-	check(err)
-	depth := 0
-	prevDepth := depth
-	for ind, element := range slice {
-		if rune(element) == '{' {
-			depth++
-		}
-		if rune(element) == '}' {
-			depth--
-		}
-		if prevDepth > depth && depth == 0 {
-			if ind < len(slice) {
-				slice = slice[:ind+1]
-				os.Truncate(path, 0)
-				os.WriteFile(path, slice, fs.ModeAppend)
-			}
-			break
-		}
-		prevDepth = depth
+		if 
 	}
 }
 
@@ -344,7 +288,6 @@ func main() {
 	http.HandleFunc("/json/", retrieveJSON)
 	http.HandleFunc("/output/", outputGraph)
 	http.HandleFunc("/confirm/", IntermediateStep)
-	http.HandleFunc("/correlation/", Correl)
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
