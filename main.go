@@ -3,6 +3,7 @@ package main
 import (
 	//"bufio"
 	"bytes"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"html/template"
@@ -52,8 +53,48 @@ func CreateDataflow() Dataflow {
 
 func check(err error) {
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+}
+
+func trimJson(path string) {
+	str, err := os.ReadFile(path)
+	check(err)
+	depth := 0
+	for i := 0; i < len(str); i++ {
+		if depth == 0 && str[i] != byte('{') && str[i] != byte('}') {
+			if str[i+1] == byte('{') || str[i+1] == byte('}') {
+				str = str[i+1:]
+				fmt.Print("\n\n\n" + string(str) + "\n\n\n")
+				break
+			}
+		}
+		if str[i] == byte('{') {
+			depth++
+		}
+		if str[i] == byte('}') {
+			if depth == 0 {
+				str = str[:i]
+				break
+			}
+			depth--
+		}
+	}
+	for i := 0; i < len(str); i++ {
+		if str[i] == byte('{') {
+			depth++
+		}
+		if str[i] == byte('}') {
+			if depth == 0 {
+				str = str[:i]
+				break
+			}
+			depth--
+		}
+	}
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC, fs.ModeAppend)
+	check(err)
+	f.Write(str)
 }
 
 func checkList(slice []Dimension, id string, testmap map[string]string) bool {
@@ -78,6 +119,15 @@ func initNameQueryMap() map[string]string {
 func searchPath(path string, r *http.Request) string {
 	title := r.URL.Path[len("/"+path+"/"):]
 	return title
+}
+
+func trimUnderscores(toTrim string) string {
+	retVal := toTrim
+	for strings.Contains(retVal, "_") {
+		ind := strings.Index(retVal, "_")
+		retVal = retVal[ind:]
+	}
+	return retVal
 }
 
 /*Handler functions*/
@@ -108,6 +158,8 @@ func titleDefault(w http.ResponseWriter, r *http.Request) {
 //Will eventually feature a more user friendly
 //way of searching
 func searchForData(w http.ResponseWriter, r *http.Request) {
+	//Asks the user for search term when get request received,
+	//Gets possible mdata features and redirects user otherwise
 	if r.Method == "GET" {
 		tmpl := template.Must(template.ParseFiles("askForSubject.html"))
 		tmpl.Execute(w, nil)
@@ -135,6 +187,7 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 				element = index
 			}
 		}
+
 		fmt.Println("\nhttps://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id + "/?references=children\n")
 		req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id+"/?references=children", nil)
 		check(err)
@@ -156,6 +209,30 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 			listIds = append(listIds, element.Id)
 			fmt.Print(element.Name + "\n")
 		}
+		f2, err = os.OpenFile("current.json", os.O_RDWR, fs.ModeAppend)
+		check(err)
+		sess := new(Session)
+		buf = new(bytes.Buffer)
+		_, err = buf.ReadFrom(f2)
+		check(err)
+		trimJson("current.json")
+		err = json.Unmarshal(buf.Bytes(), sess)
+		check(err)
+		fmt.Printf("%#v", sess)
+		if !sess.FillY {
+			sess.X_vals.Name = element.Name
+			sess.X_vals.Id = element.Id
+
+		} else {
+			sess.Y_vals.Name = element.Name
+			sess.Y_vals.Id = element.Id
+
+		}
+		vals, err := json.Marshal(sess)
+		check(err)
+		os.Truncate(f2.Name(), 0)
+		f2.Write(vals)
+
 		resp, err = http.Get("https://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id)
 		check(err)
 		reader = new(bytes.Buffer)
@@ -180,7 +257,19 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		fmt.Print(r.PostForm)
 		postForm = r.PostForm
-		query := "https://data.un.org/ws/rest/data/DF_UNDATA_ENERGY/"
+		sess := new(Session)
+		trimJson("current.json")
+		vals, err := os.ReadFile("current.json")
+		check(err)
+		err = json.Unmarshal(vals, sess)
+		check(err)
+		query := "https://data.un.org/ws/rest/data/"
+		if sess.FillY {
+			query += sess.Y_vals.Id
+		} else {
+			query += sess.X_vals.Id
+		}
+		query += "/"
 		fmt.Print(query)
 		f, err := os.Open("termOrder.html")
 		check(err)
@@ -192,18 +281,23 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		var features []string = make([]string, 0)
 		for ind, element := range listIds {
 			fmt.Println(element + "\n\n")
-			for _, index := range RSS.OrderData.OrderSet.Components.DimensionList {
-				if strings.Index(index.Id, "_") != -1 {
-					index.Id = index.Id[strings.Index(index.Id, "_"):]
-				}
-				fmt.Println(index.Id)
+			for i, index := range RSS.OrderData.OrderSet.Components.DimensionList {
+				//Trims id for comparison
+				index.Id = trimUnderscores(index.Id)
+				fmt.Println(i, " ", index.Id)
 				if strings.Contains(element, index.Id) {
 					features = append(features, r.PostForm[listnames[ind]][0]+".")
 				}
 			}
 		}
 
+		if !sess.FillY {
+			sess.X_vals.Params = features
+		} else {
+			sess.Y_vals.Params = features
+		}
 		for _, element := range features {
+			fmt.Print(element)
 			query = query + element
 		}
 
@@ -223,14 +317,14 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
-		if executed {
+		if sess.FillY {
 			_, err = buf.WriteTo(f2)
 			check(err)
 		} else {
 			_, err = buf.WriteTo(f)
 			check(err)
 		}
-		if buf.String() != "NoRecordsFound" {
+		if buf.String() != "NoRecordsFound" && buf.String() != "Could not find Dataflow and/or DSD related with this data request" {
 			_, err = f.Write(buf.Bytes())
 			check(err)
 		} else {
@@ -241,12 +335,17 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			buf := bytes.NewBuffer(slice)
 			buf.WriteTo(w)
 		}
-		if executed {
+		if sess.FillY {
 			http.Redirect(w, r, "/output/", http.StatusFound)
 		} else {
 			http.Redirect(w, r, "/confirm/", http.StatusFound)
 		}
-		executed = !executed
+		sess.FillY = !sess.FillY
+		f, err = os.Create("current.json")
+		check(err)
+		vals, err = json.Marshal(sess)
+		check(err)
+		f.Write(vals)
 	}
 }
 
@@ -280,8 +379,10 @@ func retrieveJS(w http.ResponseWriter, r *http.Request) {
 }
 
 func retrieveJSON(w http.ResponseWriter, r *http.Request) {
+
 	title := searchPath("json", r)
 	buf := new(bytes.Buffer)
+	trimJson(title + ".json")
 	file, err := os.Open(title + ".json")
 	check(err)
 	_, err = buf.ReadFrom(file)
@@ -290,6 +391,26 @@ func retrieveJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	trimJson("current.json")
+	f, err := os.OpenFile("current.json", os.O_RDWR, fs.ModeAppend)
+	check(err)
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(f)
+	Sess := new(Session)
+	strVal := strings.TrimSpace(buf.String())
+
+	if strVal == "" {
+		Sess := NewSession("", "")
+		byteVal, _ := json.Marshal(Sess)
+		f.Write(byteVal)
+
+	} else {
+		err = json.Unmarshal(buf.Bytes(), Sess)
+		check(err)
+		executed = Sess.FillY
+	}
+	trimJson("current.json")
+
 	http.HandleFunc("/javascript/", retrieveJS)
 	http.HandleFunc("/view/", getRequest)
 	http.HandleFunc("/", titleDefault)
@@ -301,7 +422,7 @@ func main() {
 	s := &http.Server{
 		Addr:           ":8080",
 		MaxHeaderBytes: 1 << 20,
-		ErrorLog:       log.New(os.Stdout, "err:", log.Ldate|log.Ltime|log.Lshortfile),
+		ErrorLog:       log.Default(),
 	}
-	log.Println(s.ListenAndServe())
+	check(s.ListenAndServe())
 }

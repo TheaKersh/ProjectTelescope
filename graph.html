@@ -14,11 +14,74 @@
 
   </style>
   <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
-  <script src="https://gist.github.com/matt-west/6500993"></script>
+  <!--
+    The following was written by matt west(https://gist.github.com/matt-west). Script is here: https://gist.github.com/matt-west/6500993
+    I'm copypasting it here because I can't damn well figure out how to embed from gists
+    without putting the whole page in my fucking webpage;
+    I'm not stealing this
+  -->
+  <script>
+    /**
+     *  @fileoverview Pearson correlation score algorithm.
+     *  @author matt.west@kojilabs.com (Matt West)
+     *  @license Copyright 2013 Matt West.
+     *  Licensed under MIT (http://opensource.org/licenses/MIT).
+     */
+
+
+    /**
+     *  Calculate the person correlation score between two items in a dataset.
+     *
+     *  @param  {object}  prefs The dataset containing data about both items that
+     *                    are being compared.
+     *  @param  {string}  p1 Item one for comparison.
+     *  @param  {string}  p2 Item two for comparison.
+     *  @return {float}  The pearson correlation score.
+     */
+    function pearsonCorrelation(prefs, p1, p2) {
+      var si = [];
+
+      for (var key in prefs[p1]) {
+        if (prefs[p2][key]) si.push(key);
+      }
+
+      var n = si.length;
+
+      if (n == 0) return 0;
+
+      var sum1 = 0;
+      for (var i = 0; i < si.length; i++) sum1 += prefs[p1][si[i]];
+
+      var sum2 = 0;
+      for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
+
+      var sum1Sq = 0;
+      for (var i = 0; i < si.length; i++) {
+        sum1Sq += Math.pow(prefs[p1][si[i]], 2);
+      }
+
+      var sum2Sq = 0;
+      for (var i = 0; i < si.length; i++) {
+        sum2Sq += Math.pow(prefs[p2][si[i]], 2);
+      }
+
+      var pSum = 0;
+      for (var i = 0; i < si.length; i++) {
+        pSum += prefs[p1][si[i]] * prefs[p2][si[i]];
+      }
+
+      var num = pSum - (sum1 * sum2 / n);
+      var den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n) *
+          (sum2Sq - Math.pow(sum2, 2) / n));
+
+      if (den == 0) return 0;
+
+      return num / den;
+    }
+  </script>
   <script defer>
     
   async function displayData(x_var, y_var) {
-    document.getElementById("tst").innerHTML = "Test3!";
     x_list = x_var.dataSets[0].series["0:0:0:0"].observations
     console.log(x_list)
     x_vals = []
@@ -34,7 +97,7 @@
       }
       
     }
-    y_list = x_var.dataSets[0].series["0:0:0:0"].observations
+    y_list = y_var.dataSets[0].series["0:0:0:0"].observations
     y_vals = []
     for (ind = 0; ind < 30; ind++){
       element = y_list[ind]
@@ -92,14 +155,19 @@
       type: 'line'
     }
   ];
-  
-
+    console.log(y_vals)
+    arr = new Array(x_vals,y_vals)
+    pVal = pearsonCorrelation(arr,0,1)
+    document.getElementById("tst").innerHTML = "Correlation:" + String(pVal)
     Plotly.newPlot('myDiv', data, layout)
   }
   async function load() {
-    fetch("/json/independent")
-      .then(response => response.json())
-      .then(data => JSON.parse(data))
+    x_var = await fetch("/json/independent").then(response => response.json())
+    y_var = await fetch("/json/dependent").then(response => response.json())
+    console.log(x_var)
+    console.log(y_var)
+    displayData(x_var, y_var)
+
   }
   window.onload = load
   </script>
@@ -111,6 +179,9 @@
   <p id="myDiv" class="graph"></p>
   </div>
 
+  <h1>Correlations</h1>
+  <div id = "tst"></div>
+  
   <h1>Brief</h1>
   <p1>
   <br>A project to optimize statistical analysis for Ingraham Highschool</br> 
@@ -122,7 +193,6 @@
   N. K. , 
   N. W. 
   </p1>
-  <div></div>
-  <div id = "tst"></div>
+  
 </body>
 </html>
