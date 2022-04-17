@@ -32,31 +32,15 @@ type Header struct {
 }
 
 /*Utility functions*/
-func (c CodeStructure) toString() [][]string {
-	var codelists CodeLists = c.CodeStructures.CodeLists
-	var retVal [][]string = make([][]string, 30)
-	for i := range retVal {
-		retVal[i] = make([]string, 1000)
-	}
-	for index, codelist := range codelists.CodeLists {
-		retVal[index][0] += codelist.Description + "\n"
-		for j, code := range codelist.Codes {
-			retVal[index][j] += code.CommonName + "  " + code.Id + "\n"
-		}
-	}
-	return retVal
-}
-
-func CreateDataflow() Dataflow {
-	return *new(Dataflow)
-}
-
 func check(err error) {
 	if err != nil {
 		panic(err)
 	}
 }
 
+//I was running into some weird errors where
+//Random stuff appeared in my json files
+//This trims them by searching them character by character
 func trimJson(path string) {
 	str, err := os.ReadFile(path)
 	check(err)
@@ -97,30 +81,13 @@ func trimJson(path string) {
 	f.Write(str)
 }
 
-func checkList(slice []Dimension, id string, testmap map[string]string) bool {
-	for _, element := range slice {
-		if element.Id == id {
-			return true
-		} else if element.Id == testmap[id] {
-			return true
-		}
-	}
-	return false
-}
-
-func initNameQueryMap() map[string]string {
-	var m map[string]string = make(map[string]string)
-	m["Greenhouse Gases"] = "DF_UNData_UNFCC"
-	m["Carbon"] = m["Greenhouse Gases"] + "/A.EN_ATM_PFCE.AUS.Gg_CO2"
-	return m
-}
-
 // Searches url path for specified string
 func searchPath(path string, r *http.Request) string {
 	title := r.URL.Path[len("/"+path+"/"):]
 	return title
 }
 
+//Trims underscores for comparison
 func trimUnderscores(toTrim string) string {
 	retVal := toTrim
 	for strings.Contains(retVal, "_") {
@@ -174,13 +141,14 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(resp.Body)
-
 		f2, err := os.Open("test.html")
 		check(err)
+		buf.WriteTo(f2)
+
 		byteVal, err := ioutil.ReadAll(f2)
 		check(err)
 		xml.Unmarshal(byteVal, &structures)
-		element := CreateDataflow()
+		element := Dataflow{}
 		for _, index := range structures.Structures.Flows.Dataflow {
 			fmt.Println(index.Id == SearchTerm)
 			if index.Name == SearchTerm {
@@ -188,8 +156,8 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		fmt.Println("\nhttps://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id + "/?references=children\n")
-		req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id+"/?references=children", nil)
+		fmt.Println("\nhttps://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id)
+		req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id, nil)
 		check(err)
 		resp, err = client.Do(req)
 		check(err)
@@ -245,7 +213,10 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 }
 
 //Gets the metadata features and presents them to the user in menu format
+//Uses go template library
+//See innerTemplate.html for details
 func testParameterization(w http.ResponseWriter, r *http.Request) {
+	//Conditional branch for request-response pairings
 	if r.Method == "GET" {
 		f, err := os.Open("templateTest.html")
 		check(err)
@@ -281,10 +252,9 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		var features []string = make([]string, 0)
 		for ind, element := range listIds {
 			fmt.Println(element + "\n\n")
-			for i, index := range RSS.OrderData.OrderSet.Components.DimensionList {
+			for _, index := range RSS.Data.Set.Components.DimensionList {
 				//Trims id for comparison
 				index.Id = trimUnderscores(index.Id)
-				fmt.Println(i, " ", index.Id)
 				if strings.Contains(element, index.Id) {
 					features = append(features, r.PostForm[listnames[ind]][0]+".")
 				}
@@ -352,6 +322,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 //Confirms to the user that the selected params are correct
 //Not sure whether i'll keep this
 func IntermediateStep(w http.ResponseWriter, r *http.Request) {
+	//Conditional branch for request-response pairing
 	if r.Method == "GET" {
 		tmpl := template.Must(template.ParseFiles("dataReview.html"))
 		tmpl.Execute(w, postForm)
@@ -367,6 +338,8 @@ func outputGraph(w http.ResponseWriter, r *http.Request) {
 	w.Write(bytes)
 }
 
+//Retrieves js
+//Needed for webpage to fetch scripts
 func retrieveJS(w http.ResponseWriter, r *http.Request) {
 	title := searchPath("javascript", r)
 	buf := new(bytes.Buffer)
@@ -378,6 +351,7 @@ func retrieveJS(w http.ResponseWriter, r *http.Request) {
 	w.Write(buf.Bytes())
 }
 
+//Json file getter
 func retrieveJSON(w http.ResponseWriter, r *http.Request) {
 
 	title := searchPath("json", r)
@@ -391,6 +365,8 @@ func retrieveJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	//Trims json at beginning and end of function
+	//This for debug: So changes to current.json can be seen
 	trimJson("current.json")
 	f, err := os.OpenFile("current.json", os.O_RDWR, fs.ModeAppend)
 	check(err)
@@ -410,7 +386,6 @@ func main() {
 		executed = Sess.FillY
 	}
 	trimJson("current.json")
-
 	http.HandleFunc("/javascript/", retrieveJS)
 	http.HandleFunc("/view/", getRequest)
 	http.HandleFunc("/", titleDefault)
@@ -424,5 +399,6 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 		ErrorLog:       log.Default(),
 	}
+	//Function will return an error if it encounters one
 	check(s.ListenAndServe())
 }
