@@ -244,9 +244,8 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 
 		//Metadata features
 		var features []string = make([]string, 0)
-			for index := range RSS.Data.Set.Components.DimensionList {
-				features = append(features, r.PostForm[listnames[index]][0]+".")
-			}
+		for index := range RSS.Data.Set.Components.DimensionList {
+			features = append(features, r.PostForm[listnames[index]][0]+".")
 		}
 
 		if !sess.FillY {
@@ -305,7 +304,6 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		f.Write(vals)
 	}
-
 }
 
 //Confirms to the user that the selected params are correct
