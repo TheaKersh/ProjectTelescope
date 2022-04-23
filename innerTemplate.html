@@ -6,7 +6,7 @@
 </header>
 <form id = "Paramform"method = "POST"> 
   <ul id = "Paramselect">
-    {{range .CodeStructures.CodeLists.CodeLists}}
+    {{range .Data.Set.Components.DimensionList}}
       <div><label for="{{.Name}}">{{.Name}}</label></div>
      <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
       

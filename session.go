@@ -13,7 +13,11 @@ type Dataset struct {
 	Params []string `json:"Params"`
 }
 
-func NewSession(x_name string, y_name string) Session {
+func EmptySess() Session {
+	return Session{X_vals: Dataset{Name: ""}, Y_vals: Dataset{Name: ""}}
+}
+
+func MakeSession(x_name string, y_name string) Session {
 	x_set := Dataset{Name: x_name}
 	y_set := Dataset{Name: y_name}
 	sess := Session{X_vals: x_set, Y_vals: y_set, FillY: false}
