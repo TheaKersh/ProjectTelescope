@@ -81,9 +81,22 @@ func trimJson(path string) {
 	f.Write(str)
 }
 
+func marshalSession(path string, toMarshal Session) error {
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC, fs.ModeAppend)
+	if err == nil {
+		return err
+	}
+	currBinary, err := json.Marshal(toMarshal)
+	if err != nil {
+		return err
+	}
+	f.Write(currBinary)
+	return nil
+}
+
 // Searches url path for specified string
-func searchPath(path string, r *http.Request) string {
-	title := r.URL.Path[len("/"+path+"/"):]
+func searchPath(url string, r *http.Request) string {
+	title := r.URL.Path[len("/"+url+"/"):]
 	return title
 }
 
@@ -165,50 +178,31 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		reader.ReadFrom(resp.Body)
 		f, err := os.Create("templateTest.html")
 		check(err)
-		var codestructures *CodeStructure = new(CodeStructure)
-		xml.Unmarshal(reader.Bytes(), codestructures)
-		fmt.Printf("%#v\n\n\n", codestructures)
+		rss := new(RSS)
+		err = xml.Unmarshal(reader.Bytes(), rss)
+		check(err)
+		currBinary, err := os.ReadFile("current.json")
+		check(err)
+		current := EmptySess()
+		err = json.Unmarshal(currBinary, &current)
+		check(err)
 		tmpl := template.Must(template.ParseFiles("innerTemplate.html"))
-		tmpl.Execute(f, codestructures)
-		listnames = make([]string, 0)
-		listIds = make([]string, 0)
-		for _, element := range codestructures.CodeStructures.CodeLists.CodeLists {
-			listnames = append(listnames, element.Name)
-			listIds = append(listIds, element.Id)
-			fmt.Print(element.Name + "\n")
-		}
-		f2, err = os.OpenFile("current.json", os.O_RDWR, fs.ModeAppend)
-		check(err)
-		sess := new(Session)
-		buf = new(bytes.Buffer)
-		_, err = buf.ReadFrom(f2)
-		check(err)
-		trimJson("current.json")
-		err = json.Unmarshal(buf.Bytes(), sess)
-		check(err)
-		fmt.Printf("%#v", sess)
-		if !sess.FillY {
-			sess.X_vals.Name = element.Name
-			sess.X_vals.Id = element.Id
-
+		tmpl.Execute(f, rss)
+		if !current.FillY {
+			current.X_vals.Name, current.X_vals.Id = element.Name, element.Id
+			for _, d := range rss.Data.Set.Components.DimensionList {
+				current.X_vals.Params = append(current.X_vals.Params, d.Id)
+			}
 		} else {
-			sess.Y_vals.Name = element.Name
-			sess.Y_vals.Id = element.Id
-
+			current.Y_vals.Name, current.Y_vals.Id = element.Name, element.Id
+			for _, d := range rss.Data.Set.Components.DimensionList {
+				current.Y_vals.Params = append(current.X_vals.Params, d.Id)
+			}
 		}
-		vals, err := json.Marshal(sess)
+		current.FillY = !current.FillY
+		err = marshalSession("current.json", current)
 		check(err)
-		os.Truncate(f2.Name(), 0)
-		f2.Write(vals)
-
-		resp, err = http.Get("https://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id)
-		check(err)
-		reader = new(bytes.Buffer)
-		reader.ReadFrom(resp.Body)
-		f, err = os.Create("termOrder.html")
-		check(err)
-		f.Write(reader.Bytes())
-		http.Redirect(w, r, "/mdata", http.StatusFound)
+		http.Redirect(w, r, "/mdata", http.StatusAccepted)
 	}
 }
 
@@ -229,7 +223,6 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		fmt.Print(r.PostForm)
 		postForm = r.PostForm
 		sess := new(Session)
-		trimJson("current.json")
 		vals, err := os.ReadFile("current.json")
 		check(err)
 		err = json.Unmarshal(vals, sess)
@@ -248,16 +241,11 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		var RSS *RSS = new(RSS)
 		xml.Unmarshal(slice, RSS)
+
 		//Metadata features
 		var features []string = make([]string, 0)
-		for ind, element := range listIds {
-			fmt.Println(element + "\n\n")
-			for _, index := range RSS.Data.Set.Components.DimensionList {
-				//Trims id for comparison
-				index.Id = trimUnderscores(index.Id)
-				if strings.Contains(element, index.Id) {
-					features = append(features, r.PostForm[listnames[ind]][0]+".")
-				}
+			for index := range RSS.Data.Set.Components.DimensionList {
+				features = append(features, r.PostForm[listnames[index]][0]+".")
 			}
 		}
 
@@ -317,6 +305,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		f.Write(vals)
 	}
+
 }
 
 //Confirms to the user that the selected params are correct
@@ -376,7 +365,7 @@ func main() {
 	strVal := strings.TrimSpace(buf.String())
 
 	if strVal == "" {
-		Sess := NewSession("", "")
+		Sess := EmptySess()
 		byteVal, _ := json.Marshal(Sess)
 		f.Write(byteVal)
 
