@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"bufio"
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
@@ -9,14 +8,11 @@ import (
 	"html/template"
 	"net/url"
 	"strings"
-
-	//"io"
 	"io/fs"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	//"strings"
 )
 
 var listnames []string
@@ -82,15 +78,25 @@ func trimJson(path string) {
 }
 
 func marshalSession(path string, toMarshal Session) error {
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC, fs.ModeAppend)
-	if err == nil {
+  f, err := os.OpenFile(path, os.O_WRONLY, fs.ModeAppend)
+	if err != nil {
 		return err
 	}
+
 	currBinary, err := json.Marshal(toMarshal)
 	if err != nil {
 		return err
 	}
-	f.Write(currBinary)
+  err = os.Truncate(path, 0)
+  if err != nil {
+    return err
+  }
+	v,err := f.Write(currBinary)
+  fmt.Print(v)
+  if err != nil{
+    return err
+  }
+  
 	return nil
 }
 
@@ -163,14 +169,13 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		xml.Unmarshal(byteVal, &structures)
 		element := Dataflow{}
 		for _, index := range structures.Structures.Flows.Dataflow {
-			fmt.Println(index.Id == SearchTerm)
 			if index.Name == SearchTerm {
 				element = index
 			}
 		}
 
 		fmt.Println("\nhttps://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id)
-		req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/"+element.DataStructure.RefID.AgencyID+"/"+element.DataStructure.RefID.Id, nil)
+		req, err = http.NewRequest("GET", "https://data.un.org/ws/rest/datastructure/" + element.DataStructure.RefID.AgencyID + "/" + element.DataStructure.RefID.Id, nil)
 		check(err)
 		resp, err = client.Do(req)
 		check(err)
@@ -179,7 +184,11 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		f, err := os.Create("templateTest.html")
 		check(err)
 		rss := new(RSS)
-		err = xml.Unmarshal(reader.Bytes(), rss)
+    f, err = os.OpenFile("features.html", os.O_RDWR|os.O_APPEND, fs.ModeAppend)
+    respVals := reader.Bytes()
+    _, err = f.Write(respVals)
+    check(err)
+		err = xml.Unmarshal(respVals, rss)
 		check(err)
 		currBinary, err := os.ReadFile("current.json")
 		check(err)
@@ -187,22 +196,68 @@ func searchForData(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(currBinary, &current)
 		check(err)
 		tmpl := template.Must(template.ParseFiles("innerTemplate.html"))
-		tmpl.Execute(f, rss)
+
+    codelists := make([]Codelist, 0, 0)
+    
 		if !current.FillY {
 			current.X_vals.Name, current.X_vals.Id = element.Name, element.Id
-			for _, d := range rss.Data.Set.Components.DimensionList {
-				current.X_vals.Params = append(current.X_vals.Params, d.Id)
-			}
+			current.X_vals.Params = make([]string, 0,0)
+      for _, d := range rss.Data.Set.Components.DimensionList {
+        url := "https://data.un.org/ws/rest/codelist/" + d.RefID.AgencyID + "/" + d.RefID.Id
+        fmt.Print("\n\n\n" + url + "\n\n\n")
+        client = http.Client{}
+        req, err := http.NewRequest("GET", url, nil)
+        check(err)
+        fmt.Printf("\n\n%#v\n\n", d)
+        rss := new(Top)
+        buf := new(bytes.Buffer)
+        resp, err := client.Do(req)
+        check(err)
+        buf.ReadFrom(resp.Body)
+        byteVals := buf.Bytes()
+        err = xml.Unmarshal(byteVals, rss)
+        check(err)
+        current.X_vals.Params = append(current.X_vals.Params,rss.Codelist.Id)
+        codelists = append(codelists, (*rss).Codelist)
+        
+      }
 		} else {
 			current.Y_vals.Name, current.Y_vals.Id = element.Name, element.Id
+      current.Y_vals.Params = make([]string, 0)
 			for _, d := range rss.Data.Set.Components.DimensionList {
-				current.Y_vals.Params = append(current.X_vals.Params, d.Id)
-			}
+        url := "https://data.un.org/ws/rest/codelist/" + d.RefID.AgencyID + "/" + d.RefID.Id
+        fmt.Print("\n\n\n" + url + "\n\n\n")
+        client = http.Client{}
+        req, err := http.NewRequest("GET", url, nil)
+        check(err)
+        fmt.Printf("\n\n%#v\n\n", d)
+        rss := new(Top)
+        buf := new(bytes.Buffer)
+        resp, err := client.Do(req)
+        check(err)
+        buf.ReadFrom(resp.Body)
+        byteVals := buf.Bytes()
+        err = xml.Unmarshal(byteVals, rss)
+        check(err)
+        current.Y_vals.Params = append(current.Y_vals.Params,rss.Codelist.Id)
+        codelists = append(codelists, (*rss).Codelist)
+        
+      }
 		}
-		current.FillY = !current.FillY
-		err = marshalSession("current.json", current)
+
+		
+    fmt.Println(current.X_vals.Params)
+    
+    err = marshalSession("current.json", current)
 		check(err)
-		http.Redirect(w, r, "/mdata", http.StatusAccepted)
+    f, err = os.OpenFile("templateTest.html", os.O_RDWR|os.O_TRUNC, fs.ModeAppend)
+    check(err)
+    
+    
+    err = tmpl.Execute(f, codelists)
+    check(err)
+		http.Redirect(w, r, "/mdata", http.StatusFound)
+    
 	}
 }
 
@@ -228,13 +283,16 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(vals, sess)
 		check(err)
 		query := "https://data.un.org/ws/rest/data/"
-		if sess.FillY {
+		paramList := make([]string, 0)
+    if sess.FillY {
 			query += sess.Y_vals.Id
+      paramList = sess.Y_vals.Params 
 		} else {
 			query += sess.X_vals.Id
+      paramList = sess.X_vals.Params
 		}
 		query += "/"
-		fmt.Print(query)
+		fmt.Print("\n\n" + query+ "\n\n")
 		f, err := os.Open("termOrder.html")
 		check(err)
 		slice, err := ioutil.ReadAll(f)
@@ -244,8 +302,9 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 
 		//Metadata features
 		var features []string = make([]string, 0)
-		for index := range RSS.Data.Set.Components.DimensionList {
-			features = append(features, r.PostForm[listnames[index]][0]+".")
+		for _,element := range paramList {
+      fmt.Print(element," ", r.PostForm[element])
+			features = append(features, r.PostForm[element][0])
 		}
 
 		if !sess.FillY {
@@ -255,7 +314,7 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		}
 		for _, element := range features {
 			fmt.Print(element)
-			query = query + element
+			query = query + element + "."
 		}
 
 		query = strings.TrimRight(query, ".")
@@ -274,16 +333,16 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 		check(err)
 		f2, err := os.OpenFile("dependent.json", os.O_WRONLY, fs.ModeAppend)
 		check(err)
-		if sess.FillY {
+		
+    if buf.String() != "NoRecordsFound" && buf.String() != "Could not find Dataflow and/or DSD related with this data request" {
+			if sess.FillY {
 			_, err = buf.WriteTo(f2)
 			check(err)
 		} else {
 			_, err = buf.WriteTo(f)
 			check(err)
 		}
-		if buf.String() != "NoRecordsFound" && buf.String() != "Could not find Dataflow and/or DSD related with this data request" {
-			_, err = f.Write(buf.Bytes())
-			check(err)
+		
 		} else {
 			f, err := os.Open("templateTest.html")
 			check(err)
@@ -292,6 +351,8 @@ func testParameterization(w http.ResponseWriter, r *http.Request) {
 			buf := bytes.NewBuffer(slice)
 			buf.WriteTo(w)
 		}
+    
+    
 		if sess.FillY {
 			http.Redirect(w, r, "/output/", http.StatusFound)
 		} else {

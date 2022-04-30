@@ -6,12 +6,12 @@
 </header>
 <form id = "Paramform"method = "POST"> 
   <ul id = "Paramselect">
-    {{range .Data.Set.Components.DimensionList}}
-      <div><label for="{{.Name}}">{{.Name}}</label></div>
-     <select name="{{.Name}}" id = "{{.Name}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
+    {{range . }}
+      <div><label for="{{.Id}}">{{.Name}}</label></div>
+     <select name="{{.Id}}" id = "{{.Id}}" EnableViewState = true><li>Select the filtered attributes of {{.Name}}</li>
       
       {{range .Codes}}  
-        <option value = "{{.Id}}" class = "recordOption"><li>{{.CommonName}}</li></option>
+        <option value = "{{.Id}}" class = "recordOption"><li>{{.Name}}</li></option>
       {{end}}
       </select>
     {{end}}
