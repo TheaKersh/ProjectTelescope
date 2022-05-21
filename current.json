@@ -1,1 +1,1 @@
-{"X_Vals":{"Name":"Energy statistics dataflow","Id":"DF_UNDATA_ENERGY","Params":["A","004","0100","01"]},"Y_Vals":{"Name":"Energy statistics dataflow","Id":"DF_UNDATA_ENERGY","Params":["A","804","0100","01"]},"FillY":true}
+{"X_Vals":{"Name":"Annual financial accounts","Id":"NASEC_IDCFINA_A","Params":["A","_Z","_X","_X","_Z","_Z","_X","_X","_X","_Z","_X","_T","ADF","ADF","_X","_Z","_Z","FAM"]},"Y_Vals":{"Name":"Annual financial accounts","Id":"NASEC_IDCFINA_A","Params":["A","_Z","_X","_X","_Z","_Z","_X","_X","_X","_Z","_X","_T","ADF","ADF","_X","_Z","_Z","FAM"]},"FillY":true}
